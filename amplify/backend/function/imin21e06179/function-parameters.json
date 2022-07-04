@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "auth": {
+      "imin154ccef5": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    }
+  },
+  "lambdaLayers": [],
+  "secretNames": [
+    "stripe_key"
+  ]
+}

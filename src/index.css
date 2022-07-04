@@ -1,13 +1,73 @@
+/*בס׳ד*/
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+form{
+  text-align: center;
+  background-color: white;
+  padding: 10px 60px;
+  border-radius: 10px;
+}
+
+.submit-button{
+
+  width: 100%;
+  height: 50px;
+  padding: 10px;
+  border: none;
+  background-color: cornflowerblue;
+  color: white;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 18px;
+  cursor: pointer;
+  margin-top: 2vh;
+  margin-bottom: 3vh;
+
+
+}
+
+.signout-button{
+  width: 100%;
+  height: 50px;
+  padding: 10px;
+  border: none;
+  background-color: cornflowerblue;
+  color: white;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 18px;
+  cursor: pointer;
+  margin-top: 2vh;
+  margin-bottom: 3vh;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  monospace;
+}
+:root {
+  --amplify-primary-color: #11a29b;
+  --amplify-primary-tint: #3f6060;
+  --amplify-primary-shade: #2dba89;
+  --amplify-background-color: #e0faf4;
+}
+.form-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: linear-gradient(
+          rgba(255, 255, 255, 0.0),
+          rgba(255, 255, 255, 0.3)
+  ),
+  url("https://smapse.com/storage/2020/05/yeshiva-university-ny-smapse6.jpg");
+  background-size: cover;
+  background-position: center;
 }

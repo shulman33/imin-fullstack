@@ -1,0 +1,23 @@
+
+
+.landing-page{
+
+    display: flex;
+
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30vh;
+
+
+}
+.container{
+    background: linear-gradient(90deg, #00d2ff 0%, #3a47d5 100%);
+}
+
+.Get-Started{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
+}
