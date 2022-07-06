@@ -1,11 +1,12 @@
 //בס׳ד
-
-import FormInput from "./FormInput.jsx";
 import {useState} from "react";
 import logo from "../assests/ImIn-logos/ImIn-logos_black.png"
 import '../styles/regipage.css';
 import {API, graphqlOperation } from "aws-amplify";
 import {createTodo} from "../graphql/mutations";
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import Button from "@mui/material/Button";
 
 async function createNewTodo() {
     const todo = {
@@ -107,16 +108,17 @@ function RegistrationPage() {
         {
             id: 3,
             name: "time",
-            type: "time",
-            placeholder: "registration time",
+            // type: "time",
+            type: "input",
             label: "registration time"
         },
         {
             id: 4,
             name: "date",
-            type: "date",
-            placeholder: "registration date",
+            // type: "date",
+            type: "input",
             label: "registration date"
+
         },
 
     ]
@@ -144,21 +146,30 @@ function RegistrationPage() {
 
     return (
         <div className="form-container">
-
-            <form style={{width : '70vh'}} onSubmit={handleSubmit}>
-                {/*<Button onClick={signOut}>Sign out</Button>*/}
+            <Box
+                component="form"
+                onSubmit={handleSubmit}
+                sx={{
+                    '& .MuiTextField-root': { m: 1, width: '25ch' },
+                }}
+                noValidate
+            >
                 <img className="logo" src={logo} alt='Im In logo'/>
-                {inputs.map((input =>
-                        <FormInput key = {input.id} {...input} value={values[input.name]} onChange = {onChange} style={{marginBottom : '10px'}}/>
-                ))}
-                <div className="crn-container" style={{justifyContent : 'center', marginLeft : 'auto', marginRight : 'auto', marginTop: '5vh', marginBottom : '2vh'}}>
-                    {crns.map((crn =>
-                            <FormInput key = {crn.id} {...crn} value={values[crn.name]} onChange = {onChange}  style={{width : '10vh', marginLeft : '5px', textAlign: 'center' }}/>
+                <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+
+                    {inputs.map((input =>
+                            <TextField key = {input.id} {...input} value={values[input.name]} onChange = {onChange} style={{marginBottom : '10px'}}/>
                     ))}
                 </div>
-                <button className='submit-button'>Submit</button>
-
-            </form>
+                <div style={{display: 'flex', flexDirection: 'row', marginTop: '3vh'}}>
+                    {crns.map((crn =>
+                            <TextField key = {crn.id} {...crn} value={values[crn.name]} onChange = {onChange} style={{width : '10vh', marginLeft : '5px', textAlign: 'center' }}/>
+                    ))}
+                </div>
+                <div style={{marginTop: '2vh'}}>
+                    <Button type="submit" variant="contained" fullWidth style={{fontWeight: 'bold'}}>Submit</Button>
+                </div>
+            </Box>
         </div>
     );
 }
