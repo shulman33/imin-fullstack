@@ -4,7 +4,25 @@ import FormInput from "./FormInput.jsx";
 import {useState} from "react";
 import logo from "../assests/ImIn-logos/ImIn-logos_black.png"
 import '../styles/regipage.css';
-import MenuBar from "./MenuBar";
+import {API, graphqlOperation } from "aws-amplify";
+import {createTodo} from "../graphql/mutations";
+
+async function createNewTodo() {
+    const todo = {
+        username: values.username,
+        password: values.password,
+        time: values.time,
+        date: values.date,
+        crn1: crnValues.crn1,
+        crn2: crnValues.crn2,
+        crn3: crnValues.crn3,
+        crn4: crnValues.crn4,
+        crn5: crnValues.crn5,
+        crn6: crnValues.crn6,
+    };
+
+    return API.graphql(graphqlOperation(createTodo, {input: todo}));
+}
 
 
 let values
@@ -113,6 +131,7 @@ function RegistrationPage() {
         // console.log('crn2: ' + getCrns(2))
         // console.log('crn3: ' + getCrns(3))
         //run()
+        createNewTodo().then(r => console.log("this worked"))
     }
 
     const onChange = (e) =>{
@@ -126,7 +145,7 @@ function RegistrationPage() {
     return (
         <div className="form-container">
 
-            <form style={{width : '70vh'}}>
+            <form style={{width : '70vh'}} onSubmit={handleSubmit}>
                 {/*<Button onClick={signOut}>Sign out</Button>*/}
                 <img className="logo" src={logo} alt='Im In logo'/>
                 {inputs.map((input =>

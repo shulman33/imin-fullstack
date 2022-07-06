@@ -22,10 +22,10 @@ function App() {
   return (
         <div>
             {user ?
-               <div>
-                 <RegistrationPage />
-                 {/*<button onClick={logout}>Logout</button>*/}
-               </div>
+                  <div>
+                    <RegistrationPage />
+                    {/*<button onClick={logout}>Logout</button>*/}
+                  </div>
                :
                 <SignInSide setUser={setUser}/>}
         </div>
