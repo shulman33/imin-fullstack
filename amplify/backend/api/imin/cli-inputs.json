@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "serviceConfiguration": {
+    "apiName": "imin",
+    "serviceName": "AppSync",
+    "gqlSchemaPath": "/Users/samshulman/Desktop/in/amplify/backend/api/imin/schema.graphql",
+    "defaultAuthType": {
+      "mode": "API_KEY",
+      "expirationTime": 365,
+      "apiKeyExpirationDate": "2023-07-06T17:50:46.215Z",
+      "keyDescription": "iminkey"
+    }
+  }
+}
