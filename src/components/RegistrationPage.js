@@ -7,7 +7,8 @@ import {createTodo} from "../graphql/mutations";
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from "@mui/material/Button";
-import {DatePicker, TimePicker} from "@mui/lab";
+import {DatePicker} from "@mui/x-date-pickers/DatePicker";
+import {TimePicker} from "@mui/x-date-pickers/TimePicker";
 
 async function createNewTodo() {
     const todo = {
@@ -37,10 +38,10 @@ let setCrnValues
 
 function RegistrationPage() {
     [selectedDate, setSelectedDate] = useState({
-        date: "",
+        date: null,
     });
     [time, setTime] = useState({
-        time: "",
+        time: null,
     });
     [values, setValues] = useState({
         username: "",
