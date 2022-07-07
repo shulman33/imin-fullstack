@@ -6,8 +6,8 @@ type Todo @model {
   id: ID!
   username: String!
   password: String
-  time: String
-  date : String
+  time: Int
+  date : Int
   crn1 : Int
   crn2 : Int
   crn3 : Int

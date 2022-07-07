@@ -7,13 +7,14 @@ import {createTodo} from "../graphql/mutations";
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from "@mui/material/Button";
+import {DatePicker, TimePicker} from "@mui/lab";
 
 async function createNewTodo() {
     const todo = {
         username: values.username,
         password: values.password,
-        time: values.time,
-        date: values.date,
+        time: parseInt(time.time),
+        date: parseInt(selectedDate.date),
         crn1: crnValues.crn1,
         crn2: crnValues.crn2,
         crn3: crnValues.crn3,
@@ -25,18 +26,27 @@ async function createNewTodo() {
     return API.graphql(graphqlOperation(createTodo, {input: todo}));
 }
 
-
+let time
+let setTime
+let selectedDate
+let setSelectedDate
 let values
 let setValues
 let crnValues
 let setCrnValues
 
 function RegistrationPage() {
+    [selectedDate, setSelectedDate] = useState({
+        date: "",
+    });
+    [time, setTime] = useState({
+        time: "",
+    });
     [values, setValues] = useState({
         username: "",
         password: "",
-        time: "",
-        date: "",
+        // time: "",
+        // date: "",
     });
     [crnValues, setCrnValues] = useState({
         crn1: "",
@@ -96,30 +106,30 @@ function RegistrationPage() {
             name: "username",
             type: "text",
             placeholder: "inside-track username",
-            label: "username"
+            label: "Username"
         },
         {
             id: 2,
             name: "password",
             type: "password",
             placeholder: "inside-track password",
-            label: "password"
+            label: "Password"
         },
-        {
-            id: 3,
-            name: "time",
-            // type: "time",
-            type: "input",
-            label: "registration time"
-        },
-        {
-            id: 4,
-            name: "date",
-            // type: "date",
-            type: "input",
-            label: "registration date"
-
-        },
+        // {
+        //     id: 3,
+        //     name: "time",
+        //     // type: "time",
+        //     type: "input",
+        //     label: "registration time"
+        // },
+        // {
+        //     id: 4,
+        //     name: "date",
+        //     // type: "date",
+        //     type: "input",
+        //     label: "registration date"
+        //
+        // },
 
     ]
 
@@ -134,6 +144,7 @@ function RegistrationPage() {
         // console.log('crn3: ' + getCrns(3))
         //run()
         createNewTodo().then(r => console.log("this worked"))
+        console.log(typeof time.time)
     }
 
     const onChange = (e) =>{
@@ -161,7 +172,27 @@ function RegistrationPage() {
                             <TextField key = {input.id} {...input} value={values[input.name]} onChange = {onChange} style={{marginBottom : '10px'}}/>
                     ))}
                 </div>
-                <div style={{display: 'flex', flexDirection: 'row', marginTop: '3vh'}}>
+                <div>
+                    <DatePicker
+                        label="Registration Date"
+                        renderInput={(params) => <TextField {...params}/>}
+                        value={selectedDate.date}
+                        onChange={(date) => setSelectedDate(date)}
+                    >
+                    </DatePicker>
+
+                </div>
+                <div>
+                    <TimePicker
+                        label="Registration Time"
+                        value={time.time}
+                        onChange={(newValue) => {
+                            setTime(newValue);
+                        }}
+                        renderInput={(params) => <TextField {...params} />}
+                    />
+                </div>
+                <div style={{display: 'flex', flexDirection: 'row', marginTop: '3vh', flexWrap: 'wrap'}}>
                     {crns.map((crn =>
                             <TextField key = {crn.id} {...crn} value={values[crn.name]} onChange = {onChange} style={{width : '10vh', marginLeft : '5px', textAlign: 'center' }}/>
                     ))}
