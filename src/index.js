@@ -5,8 +5,9 @@ import App from './App';
 import config from './aws-exports'
 import {Amplify} from "aws-amplify";
 import 'semantic-ui-css/semantic.min.css'
-import {LocalizationProvider} from "@mui/lab";
+;
 import {AdapterDateFns} from "@mui/x-date-pickers/AdapterDateFns";
+import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 
 
 Amplify.configure(config);
