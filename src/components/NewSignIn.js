@@ -41,7 +41,7 @@ export default function SignInSide({setUser}) {
             setUser(user);
             console.log('user: ' + user);
             navigate("/bot")
-            // localStorage.setItem('user', JSON.stringify(user))
+            localStorage.setItem('user', JSON.stringify(user))
         }catch(e){
             console.error(e);
             setErrorMessage('Incorrect username or password');

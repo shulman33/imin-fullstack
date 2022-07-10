@@ -1,7 +1,7 @@
 //בס׳ד
 import React, {useEffect, useState} from 'react';
 import RegistrationPage from "./components/RegistrationPage";
-import {Auth} from "aws-amplify";
+// import {Auth} from "aws-amplify";
 import SignInSide from "./components/NewSignIn";
 import {
   Routes,
@@ -11,19 +11,17 @@ import {
 
 function App() {
 
-  async function logout(e){
-    e.preventDefault();
-
-    try{
-      await Auth.signOut();
-      setUser(null);
-      console.log('success')
-    }catch(e){
-      console.error(e);
-    }
-  }
-
-
+  // async function logout(e){
+  //   e.preventDefault();
+  //
+  //   try{
+  //     await Auth.signOut();
+  //     setUser(null);
+  //     console.log('success')
+  //   }catch(e){
+  //     console.error(e);
+  //   }
+  // }
   const [user, setUser] = useState(null);
 
   // useEffect(() => {
