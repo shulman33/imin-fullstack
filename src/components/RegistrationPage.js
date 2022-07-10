@@ -12,6 +12,8 @@ import {TimePicker} from "@mui/x-date-pickers/TimePicker";
 import {AppBar, Toolbar} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import {useNavigate} from "react-router-dom";
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
 
 
 async function createNewTodo() {
@@ -40,7 +42,7 @@ let setValues
 let crnValues
 let setCrnValues
 
-function RegistrationPage() {
+function RegistrationPage({setUser}) {
     [selectedDate, setSelectedDate] = useState({
         date: null,
     });
@@ -138,6 +140,7 @@ function RegistrationPage() {
 
     ]
 
+    const [alert, setAlert] = useState(false);
     const handleSubmit = (e) =>{
         e.preventDefault()
         // console.log('username: ' + getUsernameOrPassword('username'))
@@ -148,7 +151,12 @@ function RegistrationPage() {
         // console.log('crn2: ' + getCrns(2))
         // console.log('crn3: ' + getCrns(3))
         //run()
-        createNewTodo().then(r => console.log("this worked"))
+        try{
+            createNewTodo().then(r => setAlert(true))
+        }catch (error) {
+           console.log("didnt work")
+        }
+
         console.log(typeof time.time)
     }
 
@@ -158,11 +166,13 @@ function RegistrationPage() {
     }
     const navigate = useNavigate();
 
-    const handleLogout = () => {
+    async function handleLogout(){
+        // const user = await Auth.signOut();
+        // setUser(user)
+        // localStorage.clear();
+        await Auth.signOut()
         navigate("/")
-        localStorage.clear();
-        Auth.signOut().then(console.log)
-    };
+    }
 
     console.log(values)
 
@@ -177,6 +187,12 @@ function RegistrationPage() {
                     <Button color="inherit" onClick={handleLogout}>Logout</Button>
                 </Toolbar>
             </AppBar>
+            {alert &&
+                <Alert severity="success">
+                    <AlertTitle>Success</AlertTitle>
+                    The bot is running - come back later to see your classes
+                </Alert>
+            }
             <div className="form-container">
                 <Box
                     component="form"
