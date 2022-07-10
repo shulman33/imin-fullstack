@@ -6,6 +6,7 @@ import SignInSide from "./components/NewSignIn";
 import {
   Routes,
   Route,
+    Navigate
 } from "react-router-dom";
 
 
@@ -24,13 +25,13 @@ function App() {
   // }
   const [user, setUser] = useState(null);
 
-  // useEffect(() => {
-  //   const loggedInUser = localStorage.getItem("user");
-  //   if (loggedInUser) {
-  //     const foundUser = JSON.parse(loggedInUser);
-  //     setUser(foundUser);
-  //   }
-  // }, []);
+  useEffect(() => {
+    const loggedInUser = localStorage.getItem("user");
+    if (loggedInUser) {
+      const foundUser = JSON.parse(loggedInUser);
+      setUser(foundUser);
+    }
+  }, []);
 
   return (
         // <div>
@@ -47,9 +48,9 @@ function App() {
 
         <div>
           <Routes>
-            {!user && <Route path="/" element={<SignInSide setUser={() => setUser(true)} />} />}}
-            {user && <Route path="bot" element={<RegistrationPage />} />}
-            <Route path="*" element={<SignInSide />} />
+            {!user && <Route path="/" element={<SignInSide loginUser={() => setUser(true)} />} />}}
+            {user && <Route path="bot" element={<RegistrationPage logout={() => setUser(false)}/>} />}
+            <Route path="*" element={<Navigate to={user ? "/bot" : "/"} />} />
           </Routes>
         </div>
 

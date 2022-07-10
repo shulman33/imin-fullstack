@@ -30,7 +30,7 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-export default function SignInSide({setUser}) {
+export default function SignInSide({loginUser}) {
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
 
@@ -38,10 +38,10 @@ export default function SignInSide({setUser}) {
         e.preventDefault();
         try{
             const user = await Auth.signIn(username, password);
-            setUser(user);
+            loginUser(user);
             console.log('user: ' + user);
-            navigate("/bot")
             localStorage.setItem('user', JSON.stringify(user))
+            navigate("/bot")
         }catch(e){
             console.error(e);
             setErrorMessage('Incorrect username or password');

@@ -42,7 +42,7 @@ let setValues
 let crnValues
 let setCrnValues
 
-function RegistrationPage({setUser}) {
+function RegistrationPage({logout}) {
     [selectedDate, setSelectedDate] = useState({
         date: null,
     });
@@ -167,9 +167,9 @@ function RegistrationPage({setUser}) {
     const navigate = useNavigate();
 
     async function handleLogout(){
-        // const user = await Auth.signOut();
-        // setUser(user)
-        // localStorage.clear();
+        const user = await Auth.signOut();
+        logout(user)
+        localStorage.clear();
         await Auth.signOut()
         navigate("/")
     }
