@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -7,13 +6,14 @@ import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Subscribe from "./Subscribe";
 import {Auth} from "aws-amplify";
 import {useState} from "react";
 import logo from '../assests/ImIn-logos/ImIn-logos.jpeg'
+import {useNavigate} from "react-router-dom";
+import Alert from "@mui/material/Alert";
 
 function Copyright(props) {
     return (
@@ -31,6 +31,8 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignInSide({setUser}) {
+    const [errorMessage, setErrorMessage] = useState('');
+    const navigate = useNavigate();
 
     async function login(e){
         e.preventDefault();
@@ -38,8 +40,11 @@ export default function SignInSide({setUser}) {
             const user = await Auth.signIn(username, password);
             setUser(user);
             console.log('user: ' + user);
+            navigate("/bot")
+            localStorage.setItem('user', JSON.stringify(user))
         }catch(e){
             console.error(e);
+            setErrorMessage('Incorrect username or password');
         }
     }
 
@@ -76,14 +81,11 @@ export default function SignInSide({setUser}) {
                         }}
                     >
                         <img alt='ImIn Logo' src={logo} style={{width : '15vh', marginBottom : '2vh', borderRadius : '50%'}}/>
-                        {/*<Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>*/}
-                        {/*    */}
-                        {/*    /!*<LockOutlinedIcon />*!/*/}
-                        {/*</Avatar>*/}
                         <Typography component="h1" variant="h5">
                             Sign in
                         </Typography>
                         <Box component="form" noValidate onSubmit={login} sx={{ mt: 1 }}>
+                            {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
                             <TextField
                                 margin="normal"
                                 required

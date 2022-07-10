@@ -2,13 +2,17 @@
 import {useState} from "react";
 import logo from "../assests/ImIn-logos/ImIn-logos_black.png"
 import '../styles/regipage.css';
-import {API, graphqlOperation } from "aws-amplify";
+import {API, Auth, graphqlOperation} from "aws-amplify";
 import {createTodo} from "../graphql/mutations";
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from "@mui/material/Button";
 import {DatePicker} from "@mui/x-date-pickers/DatePicker";
 import {TimePicker} from "@mui/x-date-pickers/TimePicker";
+import {AppBar, Toolbar} from "@mui/material";
+import Typography from "@mui/material/Typography";
+import {useNavigate} from "react-router-dom";
+
 
 async function createNewTodo() {
     const todo = {
@@ -152,57 +156,74 @@ function RegistrationPage() {
         setValues({...values, [e.target.name]: e.target.value });
         setCrnValues({...crnValues, [e.target.name]: e.target.value});
     }
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        navigate("/")
+        localStorage.clear();
+        Auth.signOut().then(console.log)
+    };
 
     console.log(values)
 
 
     return (
-        <div className="form-container">
-            <Box
-                component="form"
-                onSubmit={handleSubmit}
-                sx={{
-                    '& .MuiTextField-root': { m: 1, width: '25ch' },
-                }}
-                noValidate
-            >
-                <img className="logo" src={logo} alt='Im In logo'/>
-                <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+        <div>
+            <AppBar position="static">
+                <Toolbar>
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                        ImIn
+                    </Typography>
+                    <Button color="inherit" onClick={handleLogout}>Logout</Button>
+                </Toolbar>
+            </AppBar>
+            <div className="form-container">
+                <Box
+                    component="form"
+                    onSubmit={handleSubmit}
+                    sx={{
+                        '& .MuiTextField-root': { m: 1, width: '25ch' },
+                    }}
+                    noValidate
+                >
+                    <img className="logo" src={logo} alt='Im In logo'/>
+                    <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+                        {inputs.map((input =>
+                                <TextField key = {input.id} {...input} value={values[input.name]} onChange = {onChange} style={{marginBottom : '10px'}}/>
+                        ))}
+                    </div>
+                    <div>
+                        <DatePicker
+                            label="Registration Date"
+                            renderInput={(params) => <TextField {...params}/>}
+                            value={selectedDate.date}
+                            onChange={(date) => setSelectedDate(date)}
+                        >
+                        </DatePicker>
 
-                    {inputs.map((input =>
-                            <TextField key = {input.id} {...input} value={values[input.name]} onChange = {onChange} style={{marginBottom : '10px'}}/>
-                    ))}
-                </div>
-                <div>
-                    <DatePicker
-                        label="Registration Date"
-                        renderInput={(params) => <TextField {...params}/>}
-                        value={selectedDate.date}
-                        onChange={(date) => setSelectedDate(date)}
-                    >
-                    </DatePicker>
-
-                </div>
-                <div>
-                    <TimePicker
-                        label="Registration Time"
-                        value={time.time}
-                        onChange={(newValue) => {
-                            setTime(newValue);
-                        }}
-                        renderInput={(params) => <TextField {...params} />}
-                    />
-                </div>
-                <div style={{display: 'flex', flexDirection: 'row', marginTop: '3vh', flexWrap: 'wrap'}}>
-                    {crns.map((crn =>
-                            <TextField key = {crn.id} {...crn} value={values[crn.name]} onChange = {onChange} style={{width : '10vh', marginLeft : '5px', textAlign: 'center' }}/>
-                    ))}
-                </div>
-                <div style={{marginTop: '2vh'}}>
-                    <Button type="submit" variant="contained" fullWidth style={{fontWeight: 'bold'}}>Submit</Button>
-                </div>
-            </Box>
+                    </div>
+                    <div>
+                        <TimePicker
+                            label="Registration Time"
+                            value={time.time}
+                            onChange={(newValue) => {
+                                setTime(newValue);
+                            }}
+                            renderInput={(params) => <TextField {...params} />}
+                        />
+                    </div>
+                    <div style={{display: 'flex', flexDirection: 'row', marginTop: '3vh', flexWrap: 'wrap'}}>
+                        {crns.map((crn =>
+                                <TextField key = {crn.id} {...crn} value={values[crn.name]} onChange = {onChange} style={{width : '10vh', marginLeft : '5px', textAlign: 'center' }}/>
+                        ))}
+                    </div>
+                    <div style={{marginTop: '2vh'}}>
+                        <Button type="submit" variant="contained" fullWidth style={{fontWeight: 'bold'}}>Submit</Button>
+                    </div>
+                </Box>
+            </div>
         </div>
+
     );
 }
 
