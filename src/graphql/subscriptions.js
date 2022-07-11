@@ -7,8 +7,8 @@ export const onCreateTodo = /* GraphQL */ `
       id
       username
       password
-      time
-      date
+      startBrowserTime
+      registrationTime
       crn1
       crn2
       crn3
@@ -26,8 +26,8 @@ export const onUpdateTodo = /* GraphQL */ `
       id
       username
       password
-      time
-      date
+      startBrowserTime
+      registrationTime
       crn1
       crn2
       crn3
@@ -45,8 +45,8 @@ export const onDeleteTodo = /* GraphQL */ `
       id
       username
       password
-      time
-      date
+      startBrowserTime
+      registrationTime
       crn1
       crn2
       crn3

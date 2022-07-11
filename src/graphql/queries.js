@@ -7,8 +7,8 @@ export const getTodo = /* GraphQL */ `
       id
       username
       password
-      time
-      date
+      startBrowserTime
+      registrationTime
       crn1
       crn2
       crn3
@@ -31,8 +31,8 @@ export const listTodos = /* GraphQL */ `
         id
         username
         password
-        time
-        date
+        startBrowserTime
+        registrationTime
         crn1
         crn2
         crn3

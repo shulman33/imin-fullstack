@@ -23,7 +23,7 @@
         },
         "startBot": {
           "deploymentBucketName": "amplify-imin-dev-132655-deployment",
-          "s3Key": "amplify-builds/startBot-596d626d42735845336d-build.zip"
+          "s3Key": "amplify-builds/startBot-6f42305358464f6e6d6e-build.zip"
         }
       }
     }

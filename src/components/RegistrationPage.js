@@ -7,8 +7,6 @@ import {createTodo} from "../graphql/mutations";
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from "@mui/material/Button";
-import {DatePicker} from "@mui/x-date-pickers/DatePicker";
-import {TimePicker} from "@mui/x-date-pickers/TimePicker";
 import {AppBar, Toolbar} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import {useNavigate} from "react-router-dom";
@@ -16,12 +14,13 @@ import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 
 
+
 async function createNewTodo() {
     const todo = {
         username: values.username,
         password: values.password,
-        time: parseInt(time.time),
-        date: parseInt(selectedDate.date),
+        startBrowserTime: startBrowserTime(),
+        registrationTime: registrationTime(),
         crn1: crnValues.crn1,
         crn2: crnValues.crn2,
         crn3: crnValues.crn3,
@@ -33,27 +32,18 @@ async function createNewTodo() {
     return API.graphql(graphqlOperation(createTodo, {input: todo}));
 }
 
-let time
-let setTime
-let selectedDate
-let setSelectedDate
+
 let values
 let setValues
 let crnValues
 let setCrnValues
 
 function RegistrationPage({logout}) {
-    [selectedDate, setSelectedDate] = useState({
-        date: null,
-    });
-    [time, setTime] = useState({
-        time: null,
-    });
     [values, setValues] = useState({
         username: "",
         password: "",
-        // time: "",
-        // date: "",
+        time: "",
+        date: "",
     });
     [crnValues, setCrnValues] = useState({
         crn1: "",
@@ -122,21 +112,17 @@ function RegistrationPage({logout}) {
             placeholder: "inside-track password",
             label: "Password"
         },
-        // {
-        //     id: 3,
-        //     name: "time",
-        //     // type: "time",
-        //     type: "input",
-        //     label: "registration time"
-        // },
-        // {
-        //     id: 4,
-        //     name: "date",
-        //     // type: "date",
-        //     type: "input",
-        //     label: "registration date"
-        //
-        // },
+        {
+            id: 3,
+            name: "time",
+            type: "time",
+        },
+        {
+            id: 4,
+            name: "date",
+            type: "date",
+
+        },
 
     ]
 
@@ -145,19 +131,19 @@ function RegistrationPage({logout}) {
         e.preventDefault()
         // console.log('username: ' + getUsernameOrPassword('username'))
         // console.log('password: ' + getUsernameOrPassword('password'))
-        // console.log('browser start time: ' + startBrowserTime())
-        // console.log('registration time: ' + registrationTime())
+        console.log('browser start time: ' + startBrowserTime())
+        console.log('registration time: ' + registrationTime())
         // console.log('crn1: ' + getCrns(1))
         // console.log('crn2: ' + getCrns(2))
         // console.log('crn3: ' + getCrns(3))
         //run()
+        // console.log(date)
         try{
             createNewTodo().then(r => setAlert(true))
         }catch (error) {
            console.log("didnt work")
         }
 
-        console.log(typeof time.time)
     }
 
     const onChange = (e) =>{
@@ -207,26 +193,6 @@ function RegistrationPage({logout}) {
                         {inputs.map((input =>
                                 <TextField key = {input.id} {...input} value={values[input.name]} onChange = {onChange} style={{marginBottom : '10px'}}/>
                         ))}
-                    </div>
-                    <div>
-                        <DatePicker
-                            label="Registration Date"
-                            renderInput={(params) => <TextField {...params}/>}
-                            value={selectedDate.date}
-                            onChange={(date) => setSelectedDate(date)}
-                        >
-                        </DatePicker>
-
-                    </div>
-                    <div>
-                        <TimePicker
-                            label="Registration Time"
-                            value={time.time}
-                            onChange={(newValue) => {
-                                setTime(newValue);
-                            }}
-                            renderInput={(params) => <TextField {...params} />}
-                        />
                     </div>
                     <div style={{display: 'flex', flexDirection: 'row', marginTop: '3vh', flexWrap: 'wrap'}}>
                         {crns.map((crn =>
