@@ -1,4 +1,6 @@
 const chromeLambda = require("chrome-aws-lambda");
+const S3Client = require("aws-sdk/clients/s3");
+const s3 = new S3Client({ region: process.env.S3_REGION });
 
 const insideTrack = 'https://insidetrack.oci.yu.edu/';
 
@@ -61,8 +63,17 @@ exports.handler = async (event) => {
     console.timeEnd("You registered in");
 
     await page.waitForNavigation();
-    await page.screenshot({path: './registration-status.png'});
+    const screenshot = page.screenshot();
     await browser.close();
-
+    const s3result = await s3
+        .upload({
+            Bucket: process.env.S3_BUCKET,
+            Key: `${Date.now()}.png`,
+            Body: screenshot,
+            ContentType: 'image/png',
+            ACL: 'public-read'
+        })
+        .promise()
+    console.log('S3 image URL:', s3result.Location)
 
 };
