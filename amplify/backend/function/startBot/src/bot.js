@@ -14,7 +14,7 @@ exports.handler = async (event) => {
 
     const page = await browser.newPage();
     await page.goto(insideTrack);
-    await page.type('#username', 'sshulma5@mail.yu.edu');
+    await page.type('#username', 'sshulma5');
     await page.type('#password', 's7094');
 
     const  [response] = await Promise.all([
@@ -42,7 +42,7 @@ exports.handler = async (event) => {
         page.click('[value="Submit"]')
     ]);
 
-    await page.type('#crn_id1', '444444');
+    await page.type('#crn_id1', '84094');
 
     // try {
     //     await page.type('#crn_id2', crn2);
@@ -57,23 +57,25 @@ exports.handler = async (event) => {
     // } catch (error) {
     //     await page.keyboard.press('Enter');
     // }
-    await page.type('#crn_id2', '6668686');
+    await page.type('#crn_id2', '85070');
     await page.keyboard.press('Enter');
 
     console.timeEnd("You registered in");
 
     await page.waitForNavigation();
-    const screenshot = page.screenshot();
+    await page.screenshot({path: './registration-status.png'});
     await browser.close();
-    const s3result = await s3
-        .upload({
-            Bucket: process.env.S3_BUCKET,
-            Key: `${Date.now()}.png`,
-            Body: screenshot,
-            ContentType: 'image/png',
-            ACL: 'public-read'
-        })
-        .promise()
-    console.log('S3 image URL:', s3result.Location)
+    console.log('success')
+    // const s3result = await s3
+    //     .upload({
+    //         Bucket: process.env.S3_BUCKET,
+    //         Key: `${Date.now()}.png`,
+    //         Body: screenshot,
+    //         ContentType: 'image/png',
+    //         ACL: 'public-read'
+    //     })
+    //     .promise()
+    // console.log('S3 image URL:', s3result.Location)
+    // console.log("success")
 
 };

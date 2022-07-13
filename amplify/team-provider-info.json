@@ -18,12 +18,12 @@
       "function": {
         "imin21e06179": {
           "deploymentBucketName": "amplify-imin-dev-132655-deployment",
-          "s3Key": "amplify-builds/imin21e06179-32566e78595537437050-build.zip",
+          "s3Key": "amplify-builds/imin21e06179-5856732b753153703234-build.zip",
           "secretsPathAmplifyAppId": "db5sgf8m4kbac"
         },
         "startBot": {
           "deploymentBucketName": "amplify-imin-dev-132655-deployment",
-          "s3Key": "amplify-builds/startBot-6f42305358464f6e6d6e-build.zip"
+          "s3Key": "amplify-builds/startBot-586d714d6d4b774e4950-build.zip"
         }
       }
     }
