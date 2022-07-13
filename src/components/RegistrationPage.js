@@ -46,12 +46,12 @@ function RegistrationPage({logout}) {
         date: "",
     });
     [crnValues, setCrnValues] = useState({
-        crn1: "",
-        crn2: "",
-        crn3: "",
-        crn4: "",
-        crn5: "",
-        crn6: ""
+        crn1: null,
+        crn2: null,
+        crn3: null,
+        crn4: null,
+        crn5: null,
+        crn6: null
     })
     const crns = [
         {

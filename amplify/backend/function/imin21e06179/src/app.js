@@ -32,7 +32,6 @@ const bodyParser = require('body-parser')
 const awsServerlessExpressMiddleware = require('aws-serverless-express/middleware')
 const aws = require('aws-sdk')
 
-// declare a new express app
 const app = express()
 app.use(bodyParser.json({
   verify : function (req, res, buf) {
@@ -50,7 +49,6 @@ const getStripeSecret = async () => {
     return Parameters[0].Value
 }
 
-// Enable CORS for all methods
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*")
   res.header("Access-Control-Allow-Headers", "*")
@@ -61,7 +59,6 @@ app.use(function(req, res, next) {
 
 
 app.post('/webhook', async function(req, res) {
-  // Add your code here
   const stripeKey = await getStripeSecret()
   const stripe = require('stripe')(stripeKey)
   const customer =  await stripe.customers.retrieve(req.body.data.object.customer)
