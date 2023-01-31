@@ -67,7 +67,8 @@ code {
           rgba(255, 255, 255, 0.0),
           rgba(255, 255, 255, 0.3)
   ),
-  url("https://smapse.com/storage/2020/05/yeshiva-university-ny-smapse6.jpg");
+  /*url("https://smapse.com/storage/2020/05/yeshiva-university-ny-smapse6.jpg");*/
+  url("YU-1.jpg");
   background-size: cover;
   background-position: center;
 }
