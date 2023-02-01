@@ -1,6 +1,7 @@
 import {loadStripe} from '@stripe/stripe-js';
 import React from "react";
 import Link from "@mui/material/Link";
+import Button from '@mui/material/Button';
 
 
 export default function Subscribe() {
@@ -17,18 +18,26 @@ export default function Subscribe() {
                 // price: 'price_1LHWT1E10R7clMGPqANHPWaw',
 
                 // production price
-                price: 'price_1LHW1gE10R7clMGPZrl1hT6o',
+                price: 'price_1MWlPcE10R7clMGPq8uZSsYJ',
                 quantity: 1
             }],
-            mode: 'payment',
+            mode: 'subscription',
             successUrl: 'https://imin.site/resetpassword',
             // should act config this page
             cancelUrl: 'https://imin.site/'
         })
     }
     return (
-        <Link onClick={handleClick} variant="body2" style={{cursor: 'pointer'}}>
-            {"Don't have an account? Sign Up"}
-        </Link>
+        // <Link onClick={handleClick} variant="body2" style={{cursor: 'pointer'}}>
+        //     {"Don't have an account? Sign Up"}
+        // </Link>
+        <Button
+            onClick={handleClick}
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+        >
+            Sign Up
+        </Button>
     )
 }

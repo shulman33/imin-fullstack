@@ -1,5 +1,5 @@
 //בס׳ד
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import logo from "../assests/ImIn-logos/ImIn-logos_black.png"
 import '../styles/regipage.css';
 import {Auth} from "aws-amplify";
@@ -12,6 +12,8 @@ import {useNavigate} from "react-router-dom";
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import axios from 'axios';
+import { S3 } from 'aws-sdk';
+import '../aws-config';
 
 let api = 'https://pgclq90efg.execute-api.us-east-1.amazonaws.com/beta/schedule-registration'
 
@@ -22,6 +24,11 @@ async function callAPI() {
                 studentid: values.username,
                 pin: values.password,
                 crn1: crnValues.crn1,
+                crn2: crnValues.crn2,
+                crn3: crnValues.crn3,
+                crn4: crnValues.crn4,
+                crn5: crnValues.crn5,
+                crn6: crnValues.crn6,
                 cron: registrationTime()
             }
         });
@@ -127,6 +134,41 @@ function RegistrationPage({logout}) {
 
     const [alert, setAlert] = useState(false);
 
+    const [imageUrl, setImageUrl] = useState('');
+
+    const [arrived, setArrived] = useState(false);
+
+    useEffect(() => {
+        const getImage = async () => {
+            const s3 = new S3();
+            const params = {
+                Bucket: 'registrationscreenshots',
+                Key: 'screenshots/' + values.username + '_classes.png'
+            };
+            const data = await s3.getObject(params).promise();
+            const imageUrl = URL.createObjectURL(new Blob([data.Body], { type: data.ContentType }));
+            setImageUrl(imageUrl);
+            console.log('image URL is ' + imageUrl);
+            if (imageUrl) {
+                setArrived(true);
+            }
+        };
+        let intervalId;
+
+        if (!imageUrl) {
+            intervalId = setInterval(() => {
+                getImage();
+                console.log(arrived);
+            }, 5000);  // Check for the image every 5000 milliseconds (5 seconds)
+        }
+
+        return () => {
+            if (intervalId) {
+                clearInterval(intervalId);
+            }
+        };
+    }, [imageUrl, arrived]);
+
     const handleSubmit = (e) =>{
         e.preventDefault()
         console.log('registration time: ' + registrationTime())
@@ -168,29 +210,34 @@ function RegistrationPage({logout}) {
                 </Alert>
             }
             <div className="form-container">
-                <Box
-                    component="form"
-                    onSubmit={handleSubmit}
-                    sx={{
-                        '& .MuiTextField-root': { m: 1, width: '25ch' },
-                    }}
-                    noValidate
-                >
-                    <img className="logo" src={logo} alt='Im In logo'/>
-                    <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
-                        {inputs.map((input =>
-                                <TextField key = {input.id} {...input} value={values[input.name]} onChange = {onChange} style={{marginBottom : '10px'}}/>
-                        ))}
-                    </div>
-                    <div style={{display: 'flex', flexDirection: 'row', marginTop: '3vh', flexWrap: 'wrap'}}>
-                        {crns.map((crn =>
-                                <TextField key = {crn.id} {...crn} value={values[crn.name]} onChange = {onChange} style={{width : '10vh', marginLeft : '5px', textAlign: 'center' }}/>
-                        ))}
-                    </div>
-                    <div style={{marginTop: '2vh'}}>
-                        <Button type="submit" variant="contained" fullWidth style={{fontWeight: 'bold'}}>Submit</Button>
-                    </div>
-                </Box>
+                {console.log(`arrived: ${arrived}`)}
+                {arrived ? (
+                    <img src={imageUrl} alt="Class screenshot" style={{width: '850px', height: '800px'}} />
+                ) : (
+                    <Box
+                        component="form"
+                        onSubmit={handleSubmit}
+                        sx={{
+                            '& .MuiTextField-root': { m: 1, width: '25ch' },
+                        }}
+                        noValidate
+                    >
+                        <img className="logo" src={logo} alt="Im In logo" />
+                        <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+                            {inputs.map((input) => (
+                                <TextField key={input.id} {...input} value={values[input.name]} onChange={onChange} style={{marginBottom: '10px'}} />
+                            ))}
+                        </div>
+                        <div style={{display: 'flex', flexDirection: 'row', marginTop: '3vh', flexWrap: 'wrap'}}>
+                            {crns.map((crn) => (
+                                <TextField key={crn.id} {...crn} value={values[crn.name]} onChange={onChange} style={{width: '10vh', marginLeft: '5px', textAlign: 'center'}} />
+                            ))}
+                        </div>
+                        <div style={{marginTop: '2vh'}}>
+                            <Button type="submit" variant="contained" fullWidth style={{fontWeight: 'bold'}}>Submit</Button>
+                        </div>
+                    </Box>
+                )}
             </div>
         </div>
 

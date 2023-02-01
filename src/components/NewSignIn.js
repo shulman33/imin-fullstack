@@ -84,7 +84,7 @@ export default function SignInSide({loginUser}) {
                         <Typography component="h1" variant="h5">
                             Sign in
                         </Typography>
-                        <Box component="form" noValidate onSubmit={login} sx={{ mt: 1 }}>
+                        <Box component="form" noValidate sx={{ mt: 1 }}>
                             {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
                             <TextField
                                 margin="normal"
@@ -109,6 +109,7 @@ export default function SignInSide({loginUser}) {
                                 onChange={e => setPassword(e.target.value)}
                             />
                             <Button
+                                onClick={login}
                                 type="submit"
                                 fullWidth
                                 variant="contained"
@@ -116,11 +117,7 @@ export default function SignInSide({loginUser}) {
                             >
                                 Sign In
                             </Button>
-                            <Grid container>
-                                <Grid item>
-                                    <Subscribe />
-                                </Grid>
-                            </Grid>
+                            <Subscribe />
                             <Copyright sx={{ mt: 5 }} />
                         </Box>
                     </Box>
