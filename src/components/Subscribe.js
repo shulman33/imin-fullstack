@@ -1,6 +1,5 @@
 import {loadStripe} from '@stripe/stripe-js';
 import React from "react";
-import Link from "@mui/material/Link";
 import Button from '@mui/material/Button';
 
 
@@ -22,15 +21,12 @@ export default function Subscribe() {
                 quantity: 1
             }],
             mode: 'subscription',
-            successUrl: 'https://imin.site/resetpassword',
+            successUrl: 'https://www.imin.site/resetpassword',
             // should act config this page
             cancelUrl: 'https://imin.site/'
         })
     }
     return (
-        // <Link onClick={handleClick} variant="body2" style={{cursor: 'pointer'}}>
-        //     {"Don't have an account? Sign Up"}
-        // </Link>
         <Button
             onClick={handleClick}
             fullWidth
