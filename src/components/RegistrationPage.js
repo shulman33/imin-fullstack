@@ -6,7 +6,7 @@ import {Auth} from "aws-amplify";
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from "@mui/material/Button";
-import {AppBar, Toolbar} from "@mui/material";
+import {AppBar, CircularProgress, Toolbar} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import {useNavigate} from "react-router-dom";
 import Alert from '@mui/material/Alert';
@@ -14,6 +14,7 @@ import AlertTitle from '@mui/material/AlertTitle';
 import axios from 'axios';
 import { S3 } from 'aws-sdk';
 import '../aws-config';
+import Help from "./HelpIcon";
 
 let api = 'https://pgclq90efg.execute-api.us-east-1.amazonaws.com/beta/schedule-registration'
 
@@ -35,10 +36,13 @@ async function callAPI() {
         console.log(response);
     }catch (error) {
         console.error(error);
+        setBadAPICall(true);
+
     }
 }
 
-
+let badAPICall
+let setBadAPICall
 let values
 let setValues
 let crnValues
@@ -46,11 +50,16 @@ let setCrnValues
 
 function RegistrationPage({logout}) {
     [values, setValues] = useState({
-        username: "",
+        username: localStorage.getItem("username") || "",
         password: "",
         time: "",
         date: "",
     });
+
+    useEffect(() => {
+        localStorage.setItem("username", values.username);
+    }, [values.username]);
+
     [crnValues, setCrnValues] = useState({
         crn1: null,
         crn2: null,
@@ -108,25 +117,27 @@ function RegistrationPage({logout}) {
             id: 1,
             name: "username",
             type: "text",
-            placeholder: "Banner ID/800 number",
+            placeholder: "8007064567",
             label: "Banner ID"
         },
         {
             id: 2,
             name: "password",
             type: "password",
-            placeholder: "pin",
+            placeholder: "101167",
             label: "Pin"
         },
         {
             id: 3,
             name: "time",
             type: "time",
+            label: "Registration Time"
         },
         {
             id: 4,
             name: "date",
             type: "date",
+            label: "Registration Date"
 
         },
 
@@ -137,6 +148,10 @@ function RegistrationPage({logout}) {
     const [imageUrl, setImageUrl] = useState('');
 
     const [arrived, setArrived] = useState(false);
+
+    const [loading, setLoading] = useState(false);
+
+    [badAPICall, setBadAPICall] = useState(false);
 
     useEffect(() => {
         const getImage = async () => {
@@ -150,6 +165,8 @@ function RegistrationPage({logout}) {
             setImageUrl(imageUrl);
             console.log('image URL is ' + imageUrl);
             if (imageUrl) {
+                setAlert(false)
+                setLoading(false)
                 setArrived(true);
             }
         };
@@ -159,7 +176,7 @@ function RegistrationPage({logout}) {
             intervalId = setInterval(() => {
                 getImage();
                 console.log(arrived);
-            }, 5000);  // Check for the image every 5000 milliseconds (5 seconds)
+            }, 1000);  // Check for the image every 1000 milliseconds (1 seconds)
         }
 
         return () => {
@@ -172,7 +189,10 @@ function RegistrationPage({logout}) {
     const handleSubmit = (e) =>{
         e.preventDefault()
         console.log('registration time: ' + registrationTime())
-        callAPI().then(r => setAlert(true))
+        callAPI().then(r => {
+            setAlert(true);
+            setLoading(true);
+        })
 
     }
 
@@ -209,36 +229,80 @@ function RegistrationPage({logout}) {
                     The bot is running - come back later to see your classes
                 </Alert>
             }
-            <div className="form-container">
+            {badAPICall &&
+                <Alert severity="error">
+                    <AlertTitle>ERROR</AlertTitle>
+                    SOMETHING FAILED PLEASE TRY AGAIN
+                </Alert>
+            }
+            <div className="form-container" style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
                 {console.log(`arrived: ${arrived}`)}
                 {arrived ? (
-                    <img src={imageUrl} alt="Class screenshot" style={{width: '850px', height: '800px'}} />
-                ) : (
                     <Box
-                        component="form"
-                        onSubmit={handleSubmit}
                         sx={{
-                            '& .MuiTextField-root': { m: 1, width: '25ch' },
+                            borderRadius: '25px',
+                            width: 950,
+                            height: 900,
+                            backgroundColor: '#F8F8FF',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
                         }}
-                        noValidate
                     >
-                        <img className="logo" src={logo} alt="Im In logo" />
-                        <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
-                            {inputs.map((input) => (
-                                <TextField key={input.id} {...input} value={values[input.name]} onChange={onChange} style={{marginBottom: '10px'}} />
-                            ))}
-                        </div>
-                        <div style={{display: 'flex', flexDirection: 'row', marginTop: '3vh', flexWrap: 'wrap'}}>
-                            {crns.map((crn) => (
-                                <TextField key={crn.id} {...crn} value={values[crn.name]} onChange={onChange} style={{width: '10vh', marginLeft: '5px', textAlign: 'center'}} />
-                            ))}
-                        </div>
-                        <div style={{marginTop: '2vh'}}>
-                            <Button type="submit" variant="contained" fullWidth style={{fontWeight: 'bold'}}>Submit</Button>
-                        </div>
+                        <img src={imageUrl} alt="Class screenshot" style={{width: '850px', height: '800px', borderRadius: '25px'}} />
                     </Box>
+                ) : (
+                    <>
+                        {loading ? (
+                            <Box
+                                sx={{
+                                    borderRadius: '25px',
+                                    width: 950,
+                                    height: 900,
+                                    backgroundColor: '#F8F8FF',
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                }}
+                            >
+                                <CircularProgress />
+                            </Box>
+                        ) : (
+                            <div>
+                                <Box
+                                    component="form"
+                                    onSubmit={handleSubmit}
+                                    sx={{
+                                        '& .MuiTextField-root': { m: 1, width: '25ch' },
+                                    }}
+                                    noValidate
+                                >
+                                    <div style={{marginLeft: "650px"}}>
+                                        <Help />
+                                    </div>
+
+                                    <img className="logo" src={logo} alt="Im In logo" />
+
+                                    <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+                                        {inputs.map((input) => (
+                                            <TextField key={input.id} {...input} value={values[input.name]} onChange={onChange} InputLabelProps={{shrink: true,}} style={{marginBottom: '10px'}} />
+                                        ))}
+                                    </div>
+                                    <div style={{display: 'flex', flexDirection: 'row', marginTop: '3vh', flexWrap: 'wrap'}}>
+                                        {crns.map((crn) => (
+                                            <TextField key={crn.id} {...crn} value={values[crn.name]} onChange={onChange} style={{width: '10vh', marginLeft: '5px', textAlign: 'center'}} />
+                                        ))}
+                                    </div>
+                                    <div style={{marginTop: '2vh'}}>
+                                        <Button type="submit" variant="contained" fullWidth style={{fontWeight: 'bold'}}>Submit</Button>
+                                    </div>
+                                </Box>
+                            </div>
+                        )}
+                    </>
                 )}
             </div>
+
         </div>
 
     );
