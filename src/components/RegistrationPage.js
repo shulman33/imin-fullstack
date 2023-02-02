@@ -7,7 +7,7 @@ import {Auth} from "aws-amplify";
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from "@mui/material/Button";
-import {AppBar, Avatar, CircularProgress, Menu, MenuItem, Toolbar} from "@mui/material";
+import {AppBar, CircularProgress, Menu, MenuItem, Toolbar} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import {useNavigate} from "react-router-dom";
 import Alert from '@mui/material/Alert';
@@ -17,7 +17,6 @@ import { S3 } from 'aws-sdk';
 import '../aws-config';
 import Help from "./HelpIcon";
 import IconButton from "@mui/material/IconButton";
-import MenuIcon from '@mui/icons-material/Menu';
 import {AccountCircle} from "@mui/icons-material";
 
 let api = 'https://pgclq90efg.execute-api.us-east-1.amazonaws.com/beta/schedule-registration'
