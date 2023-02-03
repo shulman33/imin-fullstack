@@ -15,10 +15,10 @@ const style = {
     border: '2px solid #000080',
     boxShadow: 24,
     p: 4,
-    '@media (max-width: 576px)': { // this applies to screen widths up to 576px
-        width: '90%', // adjust the width for smaller screens
-        left: '5%', // adjust the position to maintain centered appearance
-    },
+    // '@media (max-width: 576px)': { // this applies to screen widths up to 576px
+    //     width: '90%', // adjust the width for smaller screens
+    //     // left: '5%', // adjust the position to maintain centered appearance
+    // },
 };
 
 export default function Help() {

@@ -223,6 +223,9 @@ function RegistrationPage({logout}) {
     const handleClose = () => {
         setAnchorEl(null);
     };
+    const toCancelPage = () => {
+        navigate("/cancelsubscription")
+    };
 
 
     return (
@@ -282,7 +285,7 @@ function RegistrationPage({logout}) {
                                 <Button color="inherit" onClick={handleLogout}>Logout</Button>
                             </MenuItem>
                             <MenuItem onClick={handleClose}>
-                                <Button color="inherit">Cancel Subscription</Button>
+                                <Button onClick={toCancelPage} color="inherit">Cancel Subscription</Button>
                             </MenuItem>
                         </Menu>
                     </React.Fragment>

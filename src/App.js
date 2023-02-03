@@ -8,6 +8,7 @@ import {
     Navigate
 } from "react-router-dom";
 import ForceReset from "./components/ForceReset";
+import CancelSubscription from "./components/CancelSubscription";
 
 function App() {
 
@@ -22,23 +23,13 @@ function App() {
   }, []);
 
   return (
-        // <div>
-        //     {user ?
-        //           <div>
-        //             <div>
-        //               <MenuBar />
-        //             </div>
-        //             <RegistrationPage />
-        //           </div>
-        //        :
-        //         <SignInSide setUser={setUser}/>}
-        // </div>
 
         <div>
           <Routes>
             {!user && <Route path="/" element={<SignInSide loginUser={() => setUser(true)} />} />}}
             {user && <Route path="bot" element={<RegistrationPage logout={() => setUser(false)}/>} />}
             <Route path="resetpassword" element={<ForceReset setIsLoggedIn={() => setUser(true)}/>} />
+            <Route path="cancelsubscription" element={<CancelSubscription/>} />
             <Route path="*" element={<Navigate to={user ? "/bot" : "/"} />} />
           </Routes>
         </div>

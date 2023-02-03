@@ -14,7 +14,7 @@ export default function Subscribe() {
         const {error} = await stipe.redirectToCheckout({
             lineItems: [{
                 // test price
-                // price: 'price_1LHWT1E10R7clMGPqANHPWaw',
+                // price: 'price_1MX405E10R7clMGPaM1gr2Uy',
 
                 // production price
                 price: 'price_1MWlPcE10R7clMGPq8uZSsYJ',

@@ -29,8 +29,11 @@ Amplify Params - DO NOT EDIT */
 
 const express = require('express')
 const bodyParser = require('body-parser')
+const axios = require('axios');
 const awsServerlessExpressMiddleware = require('aws-serverless-express/middleware')
 const aws = require('aws-sdk')
+let customer;
+let userEmail;
 
 const app = express()
 app.use(bodyParser.json({
@@ -61,8 +64,9 @@ app.use(function(req, res, next) {
 app.post('/webhook', async function(req, res) {
   const stripeKey = await getStripeSecret()
   const stripe = require('stripe')(stripeKey)
-  const customer =  await stripe.customers.retrieve(req.body.data.object.customer)
-  const userEmail = customer.email
+  customer =  await stripe.customers.retrieve(req.body.data.object.customer)
+  console.log('customer ID '+ customer)
+  userEmail = customer.email
 
   const cognito = new aws.CognitoIdentityServiceProvider({apiVersion: '2016-04-18'})
   cognito.adminCreateUser({
