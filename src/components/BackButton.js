@@ -1,19 +1,14 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import * as React from "react";
-import IconButton from "@mui/material/IconButton";
+import Button from '@mui/material/Button';
 
 
 function BackButton(props) {
 
     return (
-
-        <IconButton
-            onClick={props.back}
-            size="medium"
-            sx={{ ml: 2 }}
-        >
-            <ArrowBackIcon color={"primary"} sx={{ width: 32, height: 32 }}/>
-        </IconButton>
+        <Button onClick={props.back} variant="contained" startIcon={<ArrowBackIcon />}>
+            Make Changes
+        </Button>
     );
 }
 
