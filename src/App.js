@@ -9,6 +9,7 @@ import {
 } from "react-router-dom";
 import ForceReset from "./components/ForceReset";
 import CancelSubscription from "./components/CancelSubscription";
+import UserAgreement from "./components/UserAgreement";
 
 function App() {
 
@@ -30,6 +31,7 @@ function App() {
             {user && <Route path="bot" element={<RegistrationPage logout={() => setUser(false)}/>} />}
             <Route path="resetpassword" element={<ForceReset setIsLoggedIn={() => setUser(true)}/>} />
             <Route path="cancelsubscription" element={<CancelSubscription/>} />
+            <Route path="useragreement" element={<UserAgreement/>} />
             <Route path="*" element={<Navigate to={user ? "/bot" : "/"} />} />
           </Routes>
         </div>

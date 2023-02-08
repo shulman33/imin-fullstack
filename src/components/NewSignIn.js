@@ -14,6 +14,7 @@ import {useState} from "react";
 import logo from '../assests/ImIn-logos/ImIn-logos.jpeg'
 import {useNavigate} from "react-router-dom";
 import Alert from "@mui/material/Alert";
+import {registrationTime} from "./RegistrationPage";
 
 function Copyright(props) {
     return (
@@ -46,6 +47,11 @@ export default function SignInSide({loginUser}) {
             console.error(e);
             setErrorMessage('Incorrect username or password');
         }
+    }
+
+    const gotoAgreement = (e) =>{
+        e.preventDefault()
+        navigate("/useragreement")
     }
 
 
@@ -117,7 +123,16 @@ export default function SignInSide({loginUser}) {
                             >
                                 Sign In
                             </Button>
-                            <Subscribe />
+                            {/*<Subscribe />*/}
+                            <Button
+                                onClick={gotoAgreement}
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                sx={{ mt: 3, mb: 2 }}
+                            >
+                                Sign Up
+                            </Button>
                             <Copyright sx={{ mt: 5 }} />
                         </Box>
                     </Box>

@@ -183,7 +183,7 @@ function RegistrationPage({logout}, props) {
             const s3 = new S3();
             const params = {
                 Bucket: 'registrationscreenshots',
-                Key: 'screenshots/' + values.username + '_classes.png'
+                Key: 'spring2023/' + values.username + '_classes.png'
             };
             const data = await s3.getObject(params).promise();
             const imageUrl = URL.createObjectURL(new Blob([data.Body], { type: data.ContentType }));
