@@ -18,40 +18,50 @@ import '../aws-config';
 import Help from "./HelpIcon";
 import IconButton from "@mui/material/IconButton";
 import {AccountCircle} from "@mui/icons-material";
+import InvalidAlert from "./InvalidAlert";
+import BackButton from "./BackButton";
 
 let api = 'https://pgclq90efg.execute-api.us-east-1.amazonaws.com/beta/schedule-registration'
-
-async function callAPI() {
-    try {
-        const response = await axios.get(api, {
-            params: {
-                studentid: values.username,
-                pin: values.password,
-                crn1: crnValues.crn1,
-                crn2: crnValues.crn2,
-                crn3: crnValues.crn3,
-                crn4: crnValues.crn4,
-                crn5: crnValues.crn5,
-                crn6: crnValues.crn6,
-                cron: registrationTime()
-            }
-        });
-        console.log(response);
-    }catch (error) {
-        console.error(error);
-        setBadAPICall(true);
-
-    }
-}
-
 let badAPICall
 let setBadAPICall
 let values
 let setValues
 let crnValues
 let setCrnValues
+let invalidPin
+let setInvalidPin
+let invalid800
+let setInvalid800
+let dateIsSet
+let setDateIsSet
+let timeIsSet
+let setTimeIsSet
 
-function RegistrationPage({logout}) {
+async function callAPI() {
+    if (!invalidPin && !invalid800 && !dateIsSet && !timeIsSet) {
+        try {
+            const response = await axios.get(api, {
+                params: {
+                    studentid: values.username,
+                    pin: values.password,
+                    crn1: crnValues.crn1,
+                    crn2: crnValues.crn2,
+                    crn3: crnValues.crn3,
+                    crn4: crnValues.crn4,
+                    crn5: crnValues.crn5,
+                    crn6: crnValues.crn6,
+                    cron: registrationTime()
+                }
+            });
+            console.log(response);
+        } catch (error) {
+            console.error(error);
+            setBadAPICall(true);
+        }
+    }
+}
+
+function RegistrationPage({logout}, props) {
     [values, setValues] = useState({
         username: localStorage.getItem("username") || "",
         password: "",
@@ -154,6 +164,18 @@ function RegistrationPage({logout}) {
 
     const [loading, setLoading] = useState(false);
 
+    [timeIsSet, setTimeIsSet] = useState(false);
+
+    [dateIsSet, setDateIsSet] = useState(false);
+
+    const pinRegex = /^(?!(\d)\1+$)\d{6}$/;
+
+    const regex800 = /^[89]\d{8}$/;
+
+    [invalidPin, setInvalidPin] = useState(false);
+
+    [invalid800, setInvalid800] = useState(false);
+
     [badAPICall, setBadAPICall] = useState(false);
 
     useEffect(() => {
@@ -191,6 +213,22 @@ function RegistrationPage({logout}) {
 
     const handleSubmit = (e) =>{
         e.preventDefault()
+        if (!pinRegex.test(values.password)) {
+            setInvalidPin(true);
+            return
+        }
+        if (!regex800.test(values.username)) {
+            setInvalid800(true);
+            return
+        }
+        if (values.time === ""){
+            setTimeIsSet(true)
+            return
+        }
+        if (values.date === ""){
+            setDateIsSet(true)
+            return
+        }
         console.log('registration time: ' + registrationTime())
         callAPI().then(r => {
             setAlert(true);
@@ -227,6 +265,11 @@ function RegistrationPage({logout}) {
         navigate("/cancelsubscription")
     };
 
+    const goBackToForm = () => {
+        setLoading(false);
+        setAlert(false)
+        setArrived(false)
+    };
 
     return (
         <div>
@@ -303,8 +346,8 @@ function RegistrationPage({logout}) {
                     SOMETHING FAILED PLEASE TRY AGAIN
                 </Alert>
             }
+            <InvalidAlert invalidPin={invalidPin} invalid800={invalid800} timeIsSet={timeIsSet} dateIsSet={dateIsSet} />
             <div className="form-container" style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                {console.log(`arrived: ${arrived}`)}
                 {arrived ? (
                     <Box
                         sx={{
@@ -315,8 +358,20 @@ function RegistrationPage({logout}) {
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
+                            position: 'relative'
                         }}
                     >
+                        <Box
+                            sx={{
+                                position: 'absolute',
+                                top: 5,
+                                right: 30
+                            }}
+
+                        >
+                            <BackButton back={goBackToForm} />
+                        </Box>
+
                         <img src={imageUrl} alt="Class screenshot" style={{width: '850px', height: '800px', borderRadius: '25px'}} />
                     </Box>
                 ) : (
@@ -331,8 +386,20 @@ function RegistrationPage({logout}) {
                                     display: 'flex',
                                     justifyContent: 'center',
                                     alignItems: 'center',
+                                    position: 'relative'
+
                                 }}
                             >
+                                <Box
+                                    sx={{
+                                        position: 'absolute',
+                                        top: 30,
+                                        right: 50
+                                    }}
+
+                                >
+                                    <BackButton back={goBackToForm} />
+                                </Box>
                                 <CircularProgress />
                             </Box>
                         ) : (
@@ -341,6 +408,10 @@ function RegistrationPage({logout}) {
                                     component="form"
                                     onSubmit={handleSubmit}
                                     sx={{
+                                        '@media (max-width: 430px, max-height: 932px)': {
+                                            height: '50%',
+                                            width: '30%',
+                                        },
                                         '& .MuiTextField-root': { m: 1, width: '25ch' },
                                     }}
                                     noValidate
