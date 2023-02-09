@@ -6,7 +6,7 @@ import {useNavigate} from "react-router-dom";
 import Paper from "@mui/material/Paper";
 import {Stack} from "@mui/material";
 import TextField from "@mui/material/TextField";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import axios from "axios";
 import {registrationTime} from "./RegistrationPage";
 
@@ -16,11 +16,20 @@ let email
 let setEmail
 export default function CancelSubscription() {
     let api = "https://70fvor1o11.execute-api.us-east-1.amazonaws.com/prod/cancelSubscription"
+    // const queryString = `?email=${email.userEmail}`;
+    // const url = `https://61bwj007f6.execute-api.us-east-1.amazonaws.com/prod/updateImInDB${queryString}`;
     const navigate = useNavigate();
+
+    const options = {
+        method: 'get'
+    };
 
     const backToSafety = () => {
         navigate("/bot")
     };
+
+
+
 
     const cancelSubscription = async () => {
         axios.get(api, {
@@ -31,11 +40,14 @@ export default function CancelSubscription() {
             .then(function (response) {
                 console.log(response);
                 console.log("worked!!!")
+                localStorage.clear();
                 navigate("/")
             })
             .catch(function (error) {
                 console.log(error);
                 console.log("NOOOOO!!!")
+                localStorage.clear();
+                navigate("/")
             });
 
     };
