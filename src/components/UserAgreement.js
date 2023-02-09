@@ -43,30 +43,6 @@ export default function UserAgreement() {
                 </Stack>
 
                 <Box sx={{marginTop: '40px', marginLeft: '40px'}}>
-                    {/*<Typography variant="h7">*/}
-                    {/*    1. Introduction*/}
-                    {/*    ImIn provides a platform that allows users to connect with educational institutions and participate in classes. By accessing or using ImIn, you agree to be bound by the terms and conditions of this User Agreement.*/}
-
-                    {/*    2. No Guarantee of Class Availability*/}
-                    {/*    ImIn does not guarantee that you will be able to participate in the classes you desire. ImIn makes no representations or warranties regarding the availability of any classes offered through the platform.*/}
-
-                    {/*    3. No Refund Policy*/}
-                    {/*    ImIn does not provide refunds for any fees or charges related to classes or the use of the ImIn platform.*/}
-
-                    {/*    4. Limitation of Liability*/}
-                    {/*    ImIn shall not be liable for any damages arising from the inability of a user to participate in a class, including but not limited to any direct, indirect, incidental, special, or consequential damages.*/}
-
-                    {/*    5. Changes to the User Agreement*/}
-                    {/*    ImIn reserves the right to modify this User Agreement at any time. Continued use of the ImIn platform after any such changes shall constitute your consent to such changes.*/}
-
-                    {/*    6. Governing Law*/}
-                    {/*    This User Agreement shall be governed by and construed in accordance with the laws of the jurisdiction in which ImIn is located.*/}
-
-                    {/*    7. Entire Agreement*/}
-                    {/*    This User Agreement constitutes the entire agreement between you and ImIn and supersedes all prior and contemporaneous agreements, representations, warranties, and understandings.*/}
-
-                    {/*    By using ImIn, you acknowledge that you have read, understood, and agree to be bound by the terms and conditions of this User Agreement.*/}
-                    {/*</Typography>*/}
                     <Typography variant="h6"  >
                         1. Introduction
                     </Typography>

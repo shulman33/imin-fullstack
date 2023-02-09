@@ -7,11 +7,15 @@ import Paper from "@mui/material/Paper";
 import {Stack} from "@mui/material";
 import TextField from "@mui/material/TextField";
 import {useState} from "react";
+import axios from "axios";
+import {registrationTime} from "./RegistrationPage";
 
 
 
-
+let email
+let setEmail
 export default function CancelSubscription() {
+    let api = "https://70fvor1o11.execute-api.us-east-1.amazonaws.com/prod/cancelSubscription"
     const navigate = useNavigate();
 
     const backToSafety = () => {
@@ -19,13 +23,30 @@ export default function CancelSubscription() {
     };
 
     const cancelSubscription = async () => {
-        navigate("/")
+        axios.get(api, {
+            params: {
+                email: email.userEmail,
+            }
+        })
+            .then(function (response) {
+                console.log(response);
+                console.log("worked!!!")
+                navigate("/")
+            })
+            .catch(function (error) {
+                console.log(error);
+                console.log("NOOOOO!!!")
+            });
+
     };
 
-    const [email, setEmail] = useState('');
+    [email, setEmail] = useState({
+        userEmail: ""
+    })
 
     const onChange = (e) =>{
-        setEmail(e.target.value)
+        setEmail({ userEmail: e.target.value })
+        console.log(email.userEmail)
     }
 
     return (

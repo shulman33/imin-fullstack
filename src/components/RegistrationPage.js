@@ -178,38 +178,38 @@ function RegistrationPage({logout}, props) {
 
     [badAPICall, setBadAPICall] = useState(false);
 
-    useEffect(() => {
-        const getImage = async () => {
-            const s3 = new S3();
-            const params = {
-                Bucket: 'registrationscreenshots',
-                Key: 'spring2023/' + values.username + '_classes.png'
-            };
-            const data = await s3.getObject(params).promise();
-            const imageUrl = URL.createObjectURL(new Blob([data.Body], { type: data.ContentType }));
-            setImageUrl(imageUrl);
-            console.log('image URL is ' + imageUrl);
-            if (imageUrl) {
-                setAlert(false)
-                setLoading(false)
-                setArrived(true);
-            }
-        };
-        let intervalId;
-
-        if (!imageUrl) {
-            intervalId = setInterval(() => {
-                getImage();
-                console.log(arrived);
-            }, 1000);  // Check for the image every 1000 milliseconds (1 seconds)
-        }
-
-        return () => {
-            if (intervalId) {
-                clearInterval(intervalId);
-            }
-        };
-    }, [imageUrl, arrived]);
+    // useEffect(() => {
+    //     const getImage = async () => {
+    //         const s3 = new S3();
+    //         const params = {
+    //             Bucket: 'registrationscreenshots',
+    //             Key: 'spring2023/' + values.username + '_classes.png'
+    //         };
+    //         const data = await s3.getObject(params).promise();
+    //         const imageUrl = URL.createObjectURL(new Blob([data.Body], { type: data.ContentType }));
+    //         setImageUrl(imageUrl);
+    //         console.log('image URL is ' + imageUrl);
+    //         if (imageUrl) {
+    //             setAlert(false)
+    //             setLoading(false)
+    //             setArrived(true);
+    //         }
+    //     };
+    //     let intervalId;
+    //
+    //     if (!imageUrl) {
+    //         intervalId = setInterval(() => {
+    //             getImage();
+    //             console.log(arrived);
+    //         }, 1000);  // Check for the image every 1000 milliseconds (1 seconds)
+    //     }
+    //
+    //     return () => {
+    //         if (intervalId) {
+    //             clearInterval(intervalId);
+    //         }
+    //     };
+    // }, [imageUrl, arrived]);
 
     const handleSubmit = (e) =>{
         e.preventDefault()

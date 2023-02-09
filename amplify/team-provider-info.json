@@ -18,7 +18,7 @@
       "function": {
         "imin21e06179": {
           "deploymentBucketName": "amplify-imin-dev-132655-deployment",
-          "s3Key": "amplify-builds/imin21e06179-46753475763953724436-build.zip",
+          "s3Key": "amplify-builds/imin21e06179-6f515368714559593136-build.zip",
           "secretsPathAmplifyAppId": "db5sgf8m4kbac"
         },
         "startBot": {
