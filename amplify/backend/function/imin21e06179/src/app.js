@@ -60,78 +60,150 @@ app.use(function(req, res, next) {
   next()
 });
 
+// app.post('/webhook', async function(req, res) {
+//   const stripeKey = "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"
+//   const stripe = require('stripe')(stripeKey)
+//   customer =  await stripe.customers.retrieve(req.body.data.object.customer)
+//   console.log("customer object "+customer)
+//   userEmail = customer.email
+//   customerID = customer.id
+//   stripe.subscriptions.list({ customer: customerID }, async (err, subscriptions) => {
+//     if (err) {
+//       console.error(err);
+//       console.error("shit out of luck");
+//     } else {
+//       subscriptionID = subscriptions.data[0].id;
+//       console.log(`The customer's subscription ID is: ${subscriptionID}`);
+//     }
+//   });
+//   console.log('customer ID '+ customerID);
+//   console.log('subscription ID '+ subscriptionID);
+//   console.log('customer email '+ userEmail);
+//
+//   const cognito = new aws.CognitoIdentityServiceProvider({apiVersion: '2016-04-18'})
+//   return new Promise((resolve, reject) => {
+//     cognito.adminCreateUser({
+//       UserPoolId: process.env.AUTH_IMIN154CCEF5_USERPOOLID,
+//       Username: userEmail,
+//       DesiredDeliveryMediums: ['EMAIL'],
+//       UserAttributes: [
+//         {Name: 'email', Value: userEmail},
+//       ],
+//       ValidationData: [
+//         {Name: 'email', Value: userEmail},
+//       ],
+//     }, function (err, data) {
+//       if (err) {
+//         console.log(err)
+//         reject(err)
+//       } else {
+//         console.log(data)
+//
+//         resolve(data)
+//       }
+//     })
+//     // res.json({success: 'post call succeed!', url: req.url, body: req.body})
+//   }).then(() => {
+//     // make API POST call here
+//     // ...
+//     console.log("we got to the API call");
+//     const options = {
+//       method: 'post'
+//     };
+//
+//     const queryString = `?email=${userEmail}&customerID=${customerID}&subscriptionID=${subscriptionID}`;
+//     const url = `https://61bwj007f6.execute-api.us-east-1.amazonaws.com/prod/updateImInDB${queryString}`;
+//     console.log("right before the https request");
+//     const req = https.request(url, options, res => {
+//       console.log(`statusCode: ${res.statusCode}`);
+//       console.log("in the https request")
+//
+//       res.on('data', d => {
+//         let data = '';
+//         data += d;
+//         console.log(data);
+//         console.log("Holy Shit it worked");
+//       });
+//     });
+//
+//     req.on('error', error => {
+//       console.error(`There was a problem with the https request: ${error}`);
+//     });
+//
+//     req.end();
+//     res.sendStatus(200)
+//   }).catch(err => {
+//     console.log("Didnt work but tried")
+//     console.log(err)
+//   });
+// });
+
 app.post('/webhook', async function(req, res) {
-  const stripeKey = await getStripeSecret()
+  const stripeKey = "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"
   const stripe = require('stripe')(stripeKey)
-  customer =  await stripe.customers.retrieve(req.body.data.object.customer)
-  userEmail = customer.email
-  customerID = customer.id
-  stripe.subscriptions.list({ customer: customerID }, (err, subscriptions) => {
+  const customer = await stripe.customers.retrieve(req.body.data.object.customer)
+  console.log("customer object "+customer)
+  const userEmail = customer.email
+  const customerID = customer.id
+  let subscriptionID = null;
+  stripe.subscriptions.list({ customer: customerID }, async (err, subscriptions) => {
     if (err) {
       console.error(err);
       console.error("shit out of luck");
     } else {
       subscriptionID = subscriptions.data[0].id;
       console.log(`The customer's subscription ID is: ${subscriptionID}`);
+      console.log('customer ID '+ customerID);
+      console.log('subscription ID '+ subscriptionID);
+      console.log('customer email '+ userEmail);
+
+      const queryString = `?email=${userEmail}&customerID=${customerID}&subscriptionID=${subscriptionID}`;
+      const url = `https://61bwj007f6.execute-api.us-east-1.amazonaws.com/prod/updateImInDB${queryString}`;
+      console.log("right before the https request");
+      const req = await https.request(url, { method: 'post' }, response => {
+        console.log(`statusCode: ${response.statusCode}`);
+        console.log("in the https request")
+
+        response.on('data', d => {
+          let data = '';
+          data += d;
+          console.log(data);
+          console.log("Holy Shit it worked");
+        });
+      });
+
+      req.on('error', error => {
+        console.error(`There was a problem with the https request: ${error}`);
+      });
+
+      req.end();
+      res.sendStatus(200);
+
+      const cognito = new aws.CognitoIdentityServiceProvider({apiVersion: '2016-04-18'})
+      try {
+        const data = await cognito.adminCreateUser({
+          UserPoolId: process.env.AUTH_IMIN154CCEF5_USERPOOLID,
+          Username: userEmail,
+          DesiredDeliveryMediums: ['EMAIL'],
+          UserAttributes: [
+            {Name: 'email', Value: userEmail},
+          ],
+          ValidationData: [
+            {Name: 'email', Value: userEmail},
+          ],
+        }).promise();
+
+        console.log(data)
+
+      } catch (err) {
+        console.log("Didnt work but tried")
+        console.log(err)
+      }
     }
   });
-  console.log('customer ID '+ customerID);
-  console.log('subscription ID '+ subscriptionID);
-  console.log('customer email '+ userEmail);
-
-  const cognito = new aws.CognitoIdentityServiceProvider({apiVersion: '2016-04-18'})
-  return new Promise((resolve, reject) => {
-    cognito.adminCreateUser({
-      UserPoolId: process.env.AUTH_IMIN154CCEF5_USERPOOLID,
-      Username: userEmail,
-      DesiredDeliveryMediums: ['EMAIL'],
-      UserAttributes: [
-        {Name: 'email', Value: userEmail},
-      ],
-      ValidationData: [
-        {Name: 'email', Value: userEmail},
-      ],
-    }, function (err, data) {
-      if (err) {
-        console.log(err)
-        reject(err)
-      } else {
-        console.log(data)
-        resolve(data)
-      }
-    })
-  }).then(() => {
-    // make API POST call here
-    // ...
-    console.log("we got to the API call");
-    const options = {
-      method: 'post'
-    };
-
-    const queryString = `?email=${userEmail}&customerID=${customerID}&subscriptionID=${subscriptionID}`;
-    const url = `https://61bwj007f6.execute-api.us-east-1.amazonaws.com/prod/updateImInDB${queryString}`;
-    console.log("right before the https request");
-    const req = https.request(url, options, res => {
-      console.log(`statusCode: ${res.statusCode}`);
-
-      res.on('data', d => {
-        let data = '';
-        data += d;
-        console.log(data);
-        console.log("Holy Shit it worked");
-      });
-    });
-
-    req.on('error', error => {
-      console.error(`There was a problem with the https request: ${error}`);
-    });
-
-    req.end();
-  }).catch(err => {
-    console.log("Didnt work but tried")
-    console.log(err)
-  });
 });
+
+
 
 
 

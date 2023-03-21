@@ -7,19 +7,20 @@ import {Auth} from "aws-amplify";
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from "@mui/material/Button";
-import {AppBar, CircularProgress, Menu, MenuItem, Toolbar} from "@mui/material";
-import Typography from "@mui/material/Typography";
+import {CircularProgress} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import axios from 'axios';
-import { S3 } from 'aws-sdk';
 import '../aws-config';
-import Help from "./HelpIcon";
-import IconButton from "@mui/material/IconButton";
-import {AccountCircle} from "@mui/icons-material";
 import InvalidAlert from "./InvalidAlert";
 import BackButton from "./BackButton";
+import SlidingInstructionModal from "./SlidingInstructionPopup";
+import CustomMenu from "./Menu"
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 
 let api = 'https://pgclq90efg.execute-api.us-east-1.amazonaws.com/beta/schedule-registration'
 let getImgAPI = 'https://pgclq90efg.execute-api.us-east-1.amazonaws.com/beta/get-screenshot'
@@ -29,17 +30,8 @@ let values
 let setValues
 let crnValues
 let setCrnValues
-let invalidPin
-let setInvalidPin
-let invalid800
-let setInvalid800
-let dateIsSet
-let setDateIsSet
-let timeIsSet
-let setTimeIsSet
 
 async function callAPI() {
-    if (!invalidPin && !invalid800 && !dateIsSet && !timeIsSet) {
         try {
             const response = await axios.get(api, {
                 params: {
@@ -51,7 +43,7 @@ async function callAPI() {
                     crn4: crnValues.crn4,
                     crn5: crnValues.crn5,
                     crn6: crnValues.crn6,
-                    cron: registrationTime()
+                    // cron: registrationTime()
                 }
             });
             console.log(response);
@@ -59,20 +51,16 @@ async function callAPI() {
             console.error(error);
             setBadAPICall(true);
         }
-    }
 }
 
 function RegistrationPage({logout}, props) {
     [values, setValues] = useState({
         username: localStorage.getItem("username") || "",
         password: "",
-        time: "",
-        date: "",
+        time: new Date(),
+        date: new Date(),
     });
 
-    useEffect(() => {
-        localStorage.setItem("username", values.username);
-    }, [values.username]);
 
     [crnValues, setCrnValues] = useState({
         crn1: null,
@@ -126,143 +114,150 @@ function RegistrationPage({logout}, props) {
             label: "crn"
         }
     ]
-    const inputs = [
-        {
-            id: 1,
-            name: "username",
-            type: "text",
-            placeholder: "8007064567",
-            label: "Banner ID"
-        },
-        {
-            id: 2,
-            name: "password",
-            type: "password",
-            placeholder: "101167",
-            label: "Pin"
-        },
-        {
-            id: 3,
-            name: "time",
-            type: "time",
-            label: "Registration Time"
-        },
-        {
-            id: 4,
-            name: "date",
-            type: "date",
-            label: "Registration Date"
-
-        },
-
-    ]
 
     const [alert, setAlert] = useState(false);
 
-    const [imageUrl, setImageUrl] = useState('');
+    const [imageUrl, setImageUrl] = useState(localStorage.getItem('imageUrl') || '');
 
-    const [arrived, setArrived] = useState(false);
+    const [arrived, setArrived] = useState(localStorage.getItem('arrived') || false);
 
     const [loading, setLoading] = useState(false);
 
-    [timeIsSet, setTimeIsSet] = useState(false);
-
-    [dateIsSet, setDateIsSet] = useState(false);
-
-    const pinRegex = /^(?!(\d)\1+$)\d{6}$/;
-
-    const regex800 = /^[89]\d{8}$/;
-
-    [invalidPin, setInvalidPin] = useState(false);
-
-    [invalid800, setInvalid800] = useState(false);
-
     [badAPICall, setBadAPICall] = useState(false);
 
-    // useEffect(() => {
-    //     const getImage = async () => {
-    //         const s3 = new S3();
-    //         const params = {
-    //             Bucket: 'registrationscreenshots',
-    //             Key: 'spring2023/' + values.username + '_classes.png'
-    //         };
-    //         const data = await s3.getObject(params).promise();
-    //         const imageUrl = URL.createObjectURL(new Blob([data.Body], { type: data.ContentType }));
-    //         setImageUrl(imageUrl);
-    //         console.log('image URL is ' + imageUrl);
-    //         if (imageUrl) {
-    //             setAlert(false)
-    //             setLoading(false)
-    //             setArrived(true);
-    //         }
-    //     };
-    //     let intervalId;
-    //
-    //     if (!imageUrl) {
-    //         intervalId = setInterval(() => {
-    //             getImage();
-    //             console.log(arrived);
-    //         }, 1000);  // Check for the image every 1000 milliseconds (1 seconds)
-    //     }
-    //
-    //     return () => {
-    //         if (intervalId) {
-    //             clearInterval(intervalId);
-    //         }
-    //     };
-    // }, [imageUrl, arrived]);
+    const [errors, setErrors] = useState({
+        username: '',
+        password: '',
+        time: '',
+        date: '',
+    });
 
+    //TODO: Make it so that any time after registration the picture is displayed
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            const currentTime = new Date();
+            const hour = currentTime.getHours();
+            const minute = currentTime.getMinutes();
+            const second = currentTime.getSeconds();
+            // if (hour === getHours() && minute === getMinutes() && second > 3) {
+            //     axios.get(getImgAPI + '?username=' + values.username)
+            //         .then(response => {
+            //             setImageUrl(response.data.result);
+            //             setAlert(false)
+            //             setLoading(false)
+            //             setArrived(true);
+            //             clearInterval(intervalId);
+            //         })
+            //         .catch(error => {
+            //             console.error(error);
+            //         });
+            // }
+        }, 1000);
+        return () => clearInterval(intervalId);
+    }, []);
 
-    const callGetImgAPI = async (e) => {
-        e.preventDefault();
-        axios.get(getImgAPI + '?username=' + values.username, {
-            // responseType: 'arraybuffer'
-        })
-            .then(response => {
-                setImageUrl(response.data.result);
-                setAlert(false)
-                setLoading(false)
-                setArrived(true);
-            })
-            .catch(error => {
-                console.error(error);
-            });
-    }
+    useEffect(() => {
+        localStorage.setItem("username", values.username);
+        localStorage.setItem("imageUrl", imageUrl);
+        localStorage.setItem("arrived", arrived);
+    }, [values.username, imageUrl, arrived]);
 
 
 
 
     const handleSubmit = (e) =>{
         e.preventDefault()
-        if (!pinRegex.test(values.password)) {
-            setInvalidPin(true);
-            return
-        }
-        if (!regex800.test(values.username)) {
-            setInvalid800(true);
-            return
-        }
-        if (values.time === ""){
-            setTimeIsSet(true)
-            return
-        }
-        if (values.date === ""){
-            setDateIsSet(true)
-            return
-        }
-        console.log('registration time: ' + registrationTime())
+        // console.log('registration time: ' + registrationTime())
         callAPI().then(r => {
-            setAlert(true);
-            setLoading(true);
+            if (!badAPICall){
+                setAlert(true);
+                setLoading(true);
+                console.log("Schedule API status code = " + r.body.statusCode)
+            }
         })
 
     }
 
-    const onChange = (e) =>{
-        setValues({...values, [e.target.name]: e.target.value });
-        setCrnValues({...crnValues, [e.target.name]: e.target.value});
-    }
+    const onChange = (event) => {
+        const regex800 = /^[89]\d{8}$/;
+        const pinRegex = /^(?!(\d)\1+$)\d{6}$/;
+        const { name, value } = event.target;
+        setValues({
+            ...values,
+            [name]: value,
+        });
+
+        setCrnValues({
+            ...crnValues,
+            [name]: value,
+        });
+
+        let errorMessage = '';
+
+        if (name === 'username') {
+            if (!value) {
+                errorMessage = 'Username is required.';
+            }else if (!regex800.test(value)) {
+                errorMessage = 'Invalid 800 number';
+            }
+        } else if (name === 'password') {
+            if (!value) {
+                errorMessage = 'Password is required.';
+            } else if (!pinRegex.test(value)) {
+                errorMessage = 'Pin must be at least 6 digits and no characters.';
+            }
+        } else if (name === 'time') {
+            if (!value) {
+                errorMessage = 'Time is required.';
+            }
+        } else if (name === 'date') {
+            if (!value) {
+                errorMessage = 'Date is required.';
+            }
+        }
+        setErrors({
+            ...errors,
+            [name]: errorMessage,
+        });
+    };
+
+    const handleDateChange = (newValue) => {
+        onChange({ target: { name: "date", value: newValue } });
+    };
+
+    const handleTimeChange = (newValue) => {
+        onChange({ target: { name: "time", value: newValue } });
+    };
+
+    const isValidForm = () => {
+        const errorValues = Object.values(errors);
+        const hasErrors = errorValues.some((error) => error !== '');
+
+        const requiredFields = ['username', 'password', 'time', 'date'];
+        const hasEmptyFields = requiredFields.some((field) => !values[field]);
+
+        return !hasErrors && !hasEmptyFields;
+    };
+
     const navigate = useNavigate();
+
+    console.log(values)
+
+    const goBackToForm = () => {
+        axios.delete(getImgAPI + '?number=' + values.username).then(r => {
+            console.log("delete image statusCode = " + r.data.statusCode)
+            setLoading(false);
+            setAlert(false)
+            setArrived(false)
+            localStorage.clear();
+            console.log("cleared local storage")
+            console.log("arrived after cleared: " + localStorage.getItem('arrived'))
+            console.log("image after cleared: " + localStorage.getItem('imageUrl'))
+        }).catch(error => {
+            console.error(error);
+        });
+
+    };
 
     async function handleLogout(){
         const user = await Auth.signOut();
@@ -272,90 +267,10 @@ function RegistrationPage({logout}, props) {
         navigate("/")
     }
 
-    console.log(values)
-
-    const [anchorEl, setAnchorEl] = useState(null);
-    const open = Boolean(anchorEl);
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-    const toCancelPage = () => {
-        navigate("/cancelsubscription")
-    };
-
-    const goBackToForm = () => {
-        setLoading(false);
-        setAlert(false)
-        setArrived(false)
-    };
-
     return (
         <div>
-            <AppBar position="static">
-                <Toolbar>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        ImIn
-                    </Typography>
-                    <React.Fragment>
-                        <IconButton
-                            onClick={handleClick}
-                            size="small"
-                            sx={{ ml: 2 }}
-                            aria-controls={open ? 'account-menu' : undefined}
-                            aria-haspopup="true"
-                            aria-expanded={open ? 'true' : undefined}
-                        >
-                            <AccountCircle sx={{ width: 32, height: 32 }}/>
-                        </IconButton>
-                        <Menu
-                            anchorEl={anchorEl}
-                            id="account-menu"
-                            open={open}
-                            onClose={handleClose}
-                            onClick={handleClose}
-                            PaperProps={{
-                                elevation: 0,
-                                sx: {
-                                    overflow: 'visible',
-                                    filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                                    mt: 1.5,
-                                    '& .MuiAvatar-root': {
-                                        width: 32,
-                                        height: 32,
-                                        ml: -0.5,
-                                        mr: 1,
-                                    },
-                                    '&:before': {
-                                        content: '""',
-                                        display: 'block',
-                                        position: 'absolute',
-                                        top: 0,
-                                        right: 14,
-                                        width: 10,
-                                        height: 10,
-                                        bgcolor: 'background.paper',
-                                        transform: 'translateY(-50%) rotate(45deg)',
-                                        zIndex: 0,
-                                    },
-                                },
-                            }}
-                            transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-                            anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-                        >
-                            <MenuItem onClick={handleClose}>
-                                <Button color="inherit" onClick={handleLogout}>Logout</Button>
-                            </MenuItem>
-                            <MenuItem onClick={handleClose}>
-                                <Button onClick={toCancelPage} color="inherit">Cancel Subscription</Button>
-                            </MenuItem>
-                        </Menu>
-                    </React.Fragment>
-                </Toolbar>
-            </AppBar>
-            {alert &&
+            <CustomMenu logout={handleLogout}/>
+            {alert && !badAPICall &&
                 <Alert severity="success">
                     <AlertTitle>Success</AlertTitle>
                     The bot is running - come back later to see your classes
@@ -367,7 +282,6 @@ function RegistrationPage({logout}, props) {
                     SOMETHING FAILED PLEASE TRY AGAIN
                 </Alert>
             }
-            <InvalidAlert invalidPin={invalidPin} invalid800={invalid800} timeIsSet={timeIsSet} dateIsSet={dateIsSet} />
             <div className="form-container" style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
                 {arrived ? (
                     <Box
@@ -427,7 +341,7 @@ function RegistrationPage({logout}, props) {
                             <div>
                                 <Box
                                     component="form"
-                                    onSubmit={callGetImgAPI}
+                                    onSubmit={handleSubmit}
                                     sx={{
                                         '@media (max-width: 430px, max-height: 932px)': {
                                             height: '50%',
@@ -438,15 +352,63 @@ function RegistrationPage({logout}, props) {
                                     noValidate
                                 >
                                     <div style={{marginLeft: "650px"}}>
-                                        <Help />
+                                        <SlidingInstructionModal />
                                     </div>
 
                                     <img className="logo" src={logo} alt="Im In logo" />
 
                                     <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
-                                        {inputs.map((input) => (
-                                            <TextField key={input.id} {...input} value={values[input.name]} onChange={onChange} InputLabelProps={{shrink: true,}} style={{marginBottom: '10px'}} />
-                                        ))}
+                                        <TextField
+                                            label="800 Number"
+                                            name="username"
+                                            value={values.username}
+                                            onChange={onChange}
+                                            error={Boolean(errors.username)}
+                                            helperText={errors.username}
+                                            style={{ marginBottom: '10px' }}
+                                        />
+                                        <TextField
+                                            label="Pin"
+                                            name="password"
+                                            type="password"
+                                            value={values.password}
+                                            onChange={onChange}
+                                            error={Boolean(errors.password)}
+                                            helperText={errors.password}
+                                            style={{ marginBottom: '10px' }}
+                                        />
+                                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                                <DatePicker
+                                                    label="Registration Date"
+                                                    name="date"
+                                                    value={values.date}
+                                                    onChange={handleDateChange}
+                                                    renderInput={(params) => (
+                                                        <TextField
+                                                            {...params}
+                                                            error={Boolean(errors.date)}
+                                                            helperText={errors.date}
+                                                            style={{ marginBottom: "10px" }}
+                                                        />
+                                                    )}
+                                                />
+                                        </LocalizationProvider>
+                                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                            <TimePicker
+                                                label="Registration Time"
+                                                name="date"
+                                                value={values.time}
+                                                onChange={handleTimeChange}
+                                                renderInput={(params) => (
+                                                    <TextField
+                                                        {...params}
+                                                        error={Boolean(errors.time)}
+                                                        helperText={errors.time}
+                                                        style={{ marginBottom: "10px" }}
+                                                    />
+                                                )}
+                                            />
+                                        </LocalizationProvider>
                                     </div>
                                     <div style={{display: 'flex', flexDirection: 'row', marginTop: '3vh', flexWrap: 'wrap'}}>
                                         {crns.map((crn) => (
@@ -454,7 +416,7 @@ function RegistrationPage({logout}, props) {
                                         ))}
                                     </div>
                                     <div style={{marginTop: '2vh'}}>
-                                        <Button type="submit" variant="contained" fullWidth style={{fontWeight: 'bold'}}>Submit</Button>
+                                        <Button type="submit" disabled={!isValidForm()} variant="contained" fullWidth style={{fontWeight: 'bold'}}>Submit</Button>
                                     </div>
                                 </Box>
                             </div>
@@ -467,10 +429,5 @@ function RegistrationPage({logout}, props) {
 
     );
 }
-
-export function registrationTime(){
-    return values.time.substring(3) + " " + values.time.substring(0,2) + " " + values.date.substring(8) + " " + values.date.substring(5,7) + " ? 2023"
-}
-
 
 export default RegistrationPage;
