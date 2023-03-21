@@ -1,6 +1,6 @@
 //בס׳ד
+import * as React from "react";
 import {useEffect, useState} from "react";
-import * as React from 'react';
 import logo from "../assests/ImIn-logos/ImIn-logos_black.png"
 import '../styles/regipage.css';
 import {Auth} from "aws-amplify";
@@ -13,25 +13,91 @@ import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import axios from 'axios';
 import '../aws-config';
-import InvalidAlert from "./InvalidAlert";
 import BackButton from "./BackButton";
 import SlidingInstructionModal from "./SlidingInstructionPopup";
 import CustomMenu from "./Menu"
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import {LocalizationProvider} from '@mui/x-date-pickers';
+import {AdapterDateFns} from '@mui/x-date-pickers/AdapterDateFns';
+import {DatePicker} from '@mui/x-date-pickers/DatePicker';
+import {TimePicker} from '@mui/x-date-pickers/TimePicker';
 
 let api = 'https://pgclq90efg.execute-api.us-east-1.amazonaws.com/beta/schedule-registration'
 let getImgAPI = 'https://pgclq90efg.execute-api.us-east-1.amazonaws.com/beta/get-screenshot'
-let badAPICall
-let setBadAPICall
-let values
-let setValues
-let crnValues
-let setCrnValues
 
-async function callAPI() {
+
+function RegistrationPage({logout}, props) {
+    const [values, setValues] = useState({
+        username: localStorage.getItem("username") || "",
+        password: "",
+        time: null,
+        date: null,
+    });
+
+
+    const [crnValues, setCrnValues] = useState({
+        crn1: null,
+        crn2: null,
+        crn3: null,
+        crn4: null,
+        crn5: null,
+        crn6: null
+    })
+
+    const [alert, setAlert] = useState(false);
+
+    const [imageUrl, setImageUrl] = useState(localStorage.getItem('imageUrl') || '');
+
+    const [arrived, setArrived] = useState(localStorage.getItem('arrived') || false);
+
+    const [loading, setLoading] = useState(false);
+
+    const [badAPICall, setBadAPICall] = useState(false);
+
+    const [errors, setErrors] = useState({
+        username: '',
+        password: '',
+        time: '',
+        date: '',
+    });
+
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            if (values.date && values.time) {
+                const currentTime = new Date();
+                const day = currentTime.getDay();
+                const formDay = values.date.getDate();
+                const hour = currentTime.getHours();
+                const formHour = values.time.getHours();
+                const minute = currentTime.getMinutes();
+                const formMinute = values.time.getMinutes();
+                const second = currentTime.getSeconds();
+                const formSecond = values.time.getSeconds();
+                if (day >= formDay && hour >= formHour && minute >= formMinute && second > formSecond) {
+                    axios.get(getImgAPI + '?username=' + values.username)
+                        .then(response => {
+                            setImageUrl(response.data.result);
+                            setAlert(false)
+                            setLoading(false)
+                            setArrived(true);
+                            clearInterval(intervalId);
+                        })
+                        .catch(error => {
+                            console.error(error);
+                        });
+                }
+            }
+        }, 1000);
+        return () => clearInterval(intervalId);
+    }, []);
+
+
+    useEffect(() => {
+        localStorage.setItem("username", values.username);
+        localStorage.setItem("imageUrl", imageUrl);
+        localStorage.setItem("arrived", arrived);
+    }, [values.username, imageUrl, arrived]);
+
+    async function callAPI() {
         try {
             const response = await axios.get(api, {
                 params: {
@@ -43,7 +109,7 @@ async function callAPI() {
                     crn4: crnValues.crn4,
                     crn5: crnValues.crn5,
                     crn6: crnValues.crn6,
-                    // cron: registrationTime()
+                    cron: getCron()
                 }
             });
             console.log(response);
@@ -51,128 +117,22 @@ async function callAPI() {
             console.error(error);
             setBadAPICall(true);
         }
-}
-
-function RegistrationPage({logout}, props) {
-    [values, setValues] = useState({
-        username: localStorage.getItem("username") || "",
-        password: "",
-        time: new Date(),
-        date: new Date(),
-    });
-
-
-    [crnValues, setCrnValues] = useState({
-        crn1: null,
-        crn2: null,
-        crn3: null,
-        crn4: null,
-        crn5: null,
-        crn6: null
-    })
-    const crns = [
-        {
-            id: "crn1",
-            name: "crn1",
-            type: "text",
-            placeholder: "00000",
-            label: "crn"
-        },
-        {
-            id: "crn2",
-            name: "crn2",
-            type: "text",
-            placeholder: "00000",
-            label: "crn"
-        },
-        {
-            id: "crn3",
-            name: "crn3",
-            type: "text",
-            placeholder: "00000",
-            label: "crn"
-        },
-        {
-            id: "crn4",
-            name: "crn4",
-            type: "text",
-            placeholder: "00000",
-            label: "crn"
-        },
-        {
-            id: "crn5",
-            name: "crn5",
-            type: "text",
-            placeholder: "00000",
-            label: "crn"
-        },
-        {
-            id: "crn6",
-            name: "crn6",
-            type: "text",
-            placeholder: "00000",
-            label: "crn"
-        }
-    ]
-
-    const [alert, setAlert] = useState(false);
-
-    const [imageUrl, setImageUrl] = useState(localStorage.getItem('imageUrl') || '');
-
-    const [arrived, setArrived] = useState(localStorage.getItem('arrived') || false);
-
-    const [loading, setLoading] = useState(false);
-
-    [badAPICall, setBadAPICall] = useState(false);
-
-    const [errors, setErrors] = useState({
-        username: '',
-        password: '',
-        time: '',
-        date: '',
-    });
-
-    //TODO: Make it so that any time after registration the picture is displayed
-    useEffect(() => {
-        const intervalId = setInterval(() => {
-            const currentTime = new Date();
-            const hour = currentTime.getHours();
-            const minute = currentTime.getMinutes();
-            const second = currentTime.getSeconds();
-            // if (hour === getHours() && minute === getMinutes() && second > 3) {
-            //     axios.get(getImgAPI + '?username=' + values.username)
-            //         .then(response => {
-            //             setImageUrl(response.data.result);
-            //             setAlert(false)
-            //             setLoading(false)
-            //             setArrived(true);
-            //             clearInterval(intervalId);
-            //         })
-            //         .catch(error => {
-            //             console.error(error);
-            //         });
-            // }
-        }, 1000);
-        return () => clearInterval(intervalId);
-    }, []);
-
-    useEffect(() => {
-        localStorage.setItem("username", values.username);
-        localStorage.setItem("imageUrl", imageUrl);
-        localStorage.setItem("arrived", arrived);
-    }, [values.username, imageUrl, arrived]);
-
-
-
+    }
 
     const handleSubmit = (e) =>{
         e.preventDefault()
-        // console.log('registration time: ' + registrationTime())
+        setLoading(true);
+        console.log(`Submitting values: ${values.username}, ${values.password}`)
+        console.log(`Submitting cron value: ${getCron()}`)
+        console.log(`Submitting crn values: ${crnValues.crn1}, ${crnValues.crn2}, ${crnValues.crn3}, ${crnValues.crn4}, ${crnValues.crn5}, ${crnValues.crn6}`)
         callAPI().then(r => {
             if (!badAPICall){
-                setAlert(true);
-                setLoading(true);
                 console.log("Schedule API status code = " + r.body.statusCode)
+                setAlert(true);
+            } else{
+                console.log("Schedule API status code = " + r.body.statusCode)
+                setAlert(false);
+                setLoading(false);
             }
         })
 
@@ -184,11 +144,6 @@ function RegistrationPage({logout}, props) {
         const { name, value } = event.target;
         setValues({
             ...values,
-            [name]: value,
-        });
-
-        setCrnValues({
-            ...crnValues,
             [name]: value,
         });
 
@@ -221,6 +176,15 @@ function RegistrationPage({logout}, props) {
         });
     };
 
+    const handleCrnChange = (event) => {
+        const { name, value } = event.target;
+        setCrnValues({
+            ...crnValues,
+            [name]: value,
+        });
+    };
+
+
     const handleDateChange = (newValue) => {
         onChange({ target: { name: "date", value: newValue } });
     };
@@ -229,6 +193,11 @@ function RegistrationPage({logout}, props) {
         onChange({ target: { name: "time", value: newValue } });
     };
 
+    const hasAtLeastOneCrn = () => {
+        return Object.values(crnValues).some((crn) => crn !== null && crn !== "");
+    };
+
+
     const isValidForm = () => {
         const errorValues = Object.values(errors);
         const hasErrors = errorValues.some((error) => error !== '');
@@ -236,19 +205,25 @@ function RegistrationPage({logout}, props) {
         const requiredFields = ['username', 'password', 'time', 'date'];
         const hasEmptyFields = requiredFields.some((field) => !values[field]);
 
-        return !hasErrors && !hasEmptyFields;
+        return !hasErrors && !hasEmptyFields && hasAtLeastOneCrn();
     };
+
+    const getCron = () => {
+        const date = values.date;
+        const time = values.time;
+        return `${time.getMinutes()} ${time.getHours()} ${date.getDate()} ${date.getMonth() + 1} ? 2023`;
+    }
 
     const navigate = useNavigate();
 
     console.log(values)
 
     const goBackToForm = () => {
+        setLoading(false);
+        setAlert(false)
+        setArrived(false)
         axios.delete(getImgAPI + '?number=' + values.username).then(r => {
             console.log("delete image statusCode = " + r.data.statusCode)
-            setLoading(false);
-            setAlert(false)
-            setArrived(false)
             localStorage.clear();
             console.log("cleared local storage")
             console.log("arrived after cleared: " + localStorage.getItem('arrived'))
@@ -411,9 +386,49 @@ function RegistrationPage({logout}, props) {
                                         </LocalizationProvider>
                                     </div>
                                     <div style={{display: 'flex', flexDirection: 'row', marginTop: '3vh', flexWrap: 'wrap'}}>
-                                        {crns.map((crn) => (
-                                            <TextField key={crn.id} {...crn} value={values[crn.name]} onChange={onChange} style={{width: '10vh', marginLeft: '5px', textAlign: 'center'}} />
-                                        ))}
+                                        <TextField
+                                            label="CRN"
+                                            name="crn1"
+                                            value={crnValues.crn1 || ""}
+                                            onChange={handleCrnChange}
+                                            style={{width: '10vh', marginLeft: '5px', textAlign: 'center'}}
+                                        />
+                                        <TextField
+                                            label="CRN"
+                                            name="crn2"
+                                            value={crnValues.crn2 || ""}
+                                            onChange={handleCrnChange}
+                                            style={{width: '10vh', marginLeft: '5px', textAlign: 'center'}}
+                                        />
+                                        <TextField
+                                            label="CRN"
+                                            name="crn3"
+                                            value={crnValues.crn3 || ""}
+                                            onChange={handleCrnChange}
+                                            style={{width: '10vh', marginLeft: '5px', textAlign: 'center'}}
+                                        />
+                                        <TextField
+                                            label="CRN"
+                                            name="crn4"
+                                            value={crnValues.crn4 || ""}
+                                            onChange={handleCrnChange}
+                                            style={{width: '10vh', marginLeft: '5px', textAlign: 'center'}}
+                                        />
+                                        <TextField
+                                            label="CRN"
+                                            name="crn5"
+                                            value={crnValues.crn5 || ""}
+                                            onChange={handleCrnChange}
+                                            style={{width: '10vh', marginLeft: '5px', textAlign: 'center'}}
+                                        />
+                                        <TextField
+                                            label="CRN"
+                                            name="crn6"
+                                            value={crnValues.crn6 || ""}
+                                            onChange={handleCrnChange}
+                                            style={{width: '10vh', marginLeft: '5px', textAlign: 'center'}}
+                                        />
+
                                     </div>
                                     <div style={{marginTop: '2vh'}}>
                                         <Button type="submit" disabled={!isValidForm()} variant="contained" fullWidth style={{fontWeight: 'bold'}}>Submit</Button>
