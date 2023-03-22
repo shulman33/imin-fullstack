@@ -7,7 +7,7 @@ import {Auth} from "aws-amplify";
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from "@mui/material/Button";
-import {CircularProgress} from "@mui/material";
+import {CircularProgress, FormHelperText, InputLabel} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
@@ -20,6 +20,9 @@ import {LocalizationProvider} from '@mui/x-date-pickers';
 import {AdapterDateFns} from '@mui/x-date-pickers/AdapterDateFns';
 import {DatePicker} from '@mui/x-date-pickers/DatePicker';
 import {TimePicker} from '@mui/x-date-pickers/TimePicker';
+import Link from "@mui/material/Link";
+import Grid from "@mui/material/Grid";
+import InfoAlert from "./InfoAlert";
 
 let api = 'https://pgclq90efg.execute-api.us-east-1.amazonaws.com/beta/schedule-registration'
 let getImgAPI = 'https://pgclq90efg.execute-api.us-east-1.amazonaws.com/beta/get-screenshot'
@@ -52,6 +55,8 @@ function RegistrationPage({logout}, props) {
     const [loading, setLoading] = useState(false);
 
     const [badAPICall, setBadAPICall] = useState(false);
+
+    const [instruction, setInstruction] = useState("")
 
     const [errors, setErrors] = useState({
         username: '',
@@ -301,6 +306,7 @@ function RegistrationPage({logout}, props) {
     return (
         <div>
             <CustomMenu logout={handleLogout}/>
+            <InfoAlert/>
             {alert && !badAPICall &&
                 <Alert severity="success">
                     <AlertTitle>Success</AlertTitle>
@@ -398,16 +404,26 @@ function RegistrationPage({logout}, props) {
                                             helperText={errors.username}
                                             style={{ marginBottom: '10px' }}
                                         />
-                                        <TextField
-                                            label="Pin"
-                                            name="password"
-                                            type="password"
-                                            value={values.password}
-                                            onChange={onChange}
-                                            error={Boolean(errors.password)}
-                                            helperText={errors.password}
-                                            style={{ marginBottom: '10px' }}
-                                        />
+                                                <TextField
+                                                    label="Pin"
+                                                    placeholder="111111"
+                                                    name="password"
+                                                    type="password"
+                                                    value={values.password}
+                                                    onChange={onChange}
+                                                    error={Boolean(errors.password)}
+                                                    style={{ marginBottom: '10px', width: '205px' }}
+                                                    onFocus={() => setInstruction("Enter your Banner PIN. If you do not know it, reset it ")}
+                                                    onBlur={() => setInstruction("")}
+                                                />
+                                                {errors.password && <FormHelperText error>{errors.password}</FormHelperText>}
+                                                <FormHelperText>
+                                                    {instruction}
+                                                    {instruction && (
+                                                        <Link href="https://banner.oci.yu.edu/ssb/twbkwbis.P_GenMenu?name=bmenu.P_MainMnu" target="_blank">here</Link>
+                                                    )}
+                                                </FormHelperText>
+
                                         <LocalizationProvider dateAdapter={AdapterDateFns}>
                                                 <DatePicker
                                                     label="Registration Date"
