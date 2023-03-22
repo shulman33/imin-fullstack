@@ -27,7 +27,7 @@ let getImgAPI = 'https://pgclq90efg.execute-api.us-east-1.amazonaws.com/beta/get
 
 function RegistrationPage({logout}, props) {
     const [values, setValues] = useState({
-        username: localStorage.getItem("username") || "",
+        username: "",
         password: "",
         time: null,
         date: null,
@@ -45,9 +45,9 @@ function RegistrationPage({logout}, props) {
 
     const [alert, setAlert] = useState(false);
 
-    const [imageUrl, setImageUrl] = useState(localStorage.getItem('imageUrl') || '');
+    const [imageUrl, setImageUrl] = useState('');
 
-    const [arrived, setArrived] = useState(localStorage.getItem('arrived') || false);
+    const [arrived, setArrived] = useState(false);
 
     const [loading, setLoading] = useState(false);
 
@@ -60,19 +60,65 @@ function RegistrationPage({logout}, props) {
         date: '',
     });
 
+    const [registrationTime, setRegistrationTime] = useState({
+        day: null,
+        hour: null,
+        min: null,
+        second: null
+    })
+
+    useEffect(() => {
+        const storedArrived = localStorage.getItem('arrived');
+        const storedLoading = localStorage.getItem('loading');
+        const storedImageUrl = localStorage.getItem('imageURL')
+        if (storedArrived){
+            setArrived(JSON.parse(storedArrived));
+        }
+        if (storedLoading){
+            setLoading(JSON.parse(storedLoading));
+        }
+        if (storedImageUrl){
+            setImageUrl(JSON.parse(storedImageUrl))
+        }
+    }, []);
+
+    useEffect(() => {
+        if (arrived){
+            localStorage.setItem('arrived', JSON.stringify(arrived));
+        }else{
+            localStorage.removeItem('arrived');
+        }
+        if (loading){
+            localStorage.setItem('loading', JSON.stringify(loading));
+        }else{
+            localStorage.removeItem('loading');
+        }
+        if (imageUrl){
+            localStorage.setItem('imageURL', JSON.stringify(imageUrl));
+        }else{
+            localStorage.removeItem('imageURL');
+        }
+    }, [arrived, loading])
+
+
     useEffect(() => {
         const intervalId = setInterval(() => {
-            if (values.date && values.time) {
+            // console.log("running useEffect")
+            // console.log(`inside useeffect ${registrationTime.day}, ${registrationTime.hour}, ${registrationTime.min}, ${registrationTime.second}`)
+            if (registrationTime.day) {
                 const currentTime = new Date();
-                const day = currentTime.getDay();
-                const formDay = values.date.getDate();
+                const day = currentTime.getDate();
+                const formDay = registrationTime.day;
                 const hour = currentTime.getHours();
-                const formHour = values.time.getHours();
+                const formHour = registrationTime.hour;
                 const minute = currentTime.getMinutes();
-                const formMinute = values.time.getMinutes();
+                const formMinute = registrationTime.min;
                 const second = currentTime.getSeconds();
-                const formSecond = values.time.getSeconds();
+                const formSecond = registrationTime.second;
+                console.log(`System time: Hours: ${hour}, Minutes: ${minute}, Seconds: ${second} days: ${day}`)
+                console.log(`Form time: Hours: ${formHour}, Minutes: ${formMinute}, Seconds: ${formSecond} days: ${formDay}`)
                 if (day >= formDay && hour >= formHour && minute >= formMinute && second > formSecond) {
+                    console.log("inside inner if before axios")
                     axios.get(getImgAPI + '?username=' + values.username)
                         .then(response => {
                             setImageUrl(response.data.result);
@@ -88,14 +134,11 @@ function RegistrationPage({logout}, props) {
             }
         }, 1000);
         return () => clearInterval(intervalId);
-    }, []);
-
+    }, [values.username, registrationTime.day, registrationTime.hour, registrationTime.min, registrationTime.second]);
 
     useEffect(() => {
-        localStorage.setItem("username", values.username);
-        localStorage.setItem("imageUrl", imageUrl);
-        localStorage.setItem("arrived", arrived);
-    }, [values.username, imageUrl, arrived]);
+        console.log(`arrived: ${arrived}`)
+    }, [arrived])
 
     async function callAPI() {
         try {
@@ -118,19 +161,30 @@ function RegistrationPage({logout}, props) {
             setBadAPICall(true);
         }
     }
+    useEffect(() => {
+        console.log(registrationTime);
+    }, [registrationTime]);
 
     const handleSubmit = (e) =>{
         e.preventDefault()
         setLoading(true);
+        const date = values.date;
+        const time = values.time;
         console.log(`Submitting values: ${values.username}, ${values.password}`)
         console.log(`Submitting cron value: ${getCron()}`)
         console.log(`Submitting crn values: ${crnValues.crn1}, ${crnValues.crn2}, ${crnValues.crn3}, ${crnValues.crn4}, ${crnValues.crn5}, ${crnValues.crn6}`)
+        setRegistrationTime({
+            day: date.getDate(),
+            hour: time.getHours(),
+            min: time.getMinutes(),
+            second: time.getSeconds(),
+        })
         callAPI().then(r => {
             if (!badAPICall){
-                console.log("Schedule API status code = " + r.body.statusCode)
+                console.log("Succesfull call to API")
                 setAlert(true);
             } else{
-                console.log("Schedule API status code = " + r.body.statusCode)
+                console.log("Failure to call API")
                 setAlert(false);
                 setLoading(false);
             }
@@ -222,12 +276,14 @@ function RegistrationPage({logout}, props) {
         setLoading(false);
         setAlert(false)
         setArrived(false)
+        setRegistrationTime({
+            day: 0,
+            hour: 0,
+            min: 0,
+            second: 0
+        })
         axios.delete(getImgAPI + '?number=' + values.username).then(r => {
-            console.log("delete image statusCode = " + r.data.statusCode)
-            localStorage.clear();
-            console.log("cleared local storage")
-            console.log("arrived after cleared: " + localStorage.getItem('arrived'))
-            console.log("image after cleared: " + localStorage.getItem('imageUrl'))
+            console.log("deleted")
         }).catch(error => {
             console.error(error);
         });
