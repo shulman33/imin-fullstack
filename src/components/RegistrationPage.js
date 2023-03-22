@@ -76,6 +76,8 @@ function RegistrationPage({logout}, props) {
         const storedArrived = localStorage.getItem('arrived');
         const storedLoading = localStorage.getItem('loading');
         const storedImageUrl = localStorage.getItem('imageURL')
+        const storedRegistrationTime = localStorage.getItem('registrationTime')
+        const stored800 = localStorage.getItem('800Number')
         if (storedArrived){
             setArrived(JSON.parse(storedArrived));
         }
@@ -84,6 +86,14 @@ function RegistrationPage({logout}, props) {
         }
         if (storedImageUrl){
             setImageUrl(JSON.parse(storedImageUrl))
+        }
+        if (storedRegistrationTime){
+            setRegistrationTime(JSON.parse(storedRegistrationTime))
+        }
+        if (stored800){
+            setValues({
+                username: JSON.parse(stored800)
+            })
         }
     }, []);
 
@@ -103,7 +113,17 @@ function RegistrationPage({logout}, props) {
         }else{
             localStorage.removeItem('imageURL');
         }
-    }, [arrived, loading])
+        if (registrationTime.day){
+            localStorage.setItem('registrationTime', JSON.stringify(registrationTime))
+        }else{
+            localStorage.removeItem('registrationTime')
+        }
+        if (values.username){
+            localStorage.setItem('800Number', JSON.stringify(values.username))
+        }else{
+            localStorage.removeItem('800Number')
+        }
+    }, [arrived, loading, registrationTime, values.username])
 
 
     useEffect(() => {
@@ -216,7 +236,7 @@ function RegistrationPage({logout}, props) {
             }
         } else if (name === 'password') {
             if (!value) {
-                errorMessage = 'Password is required.';
+                errorMessage = 'Pin is required.';
             } else if (!pinRegex.test(value)) {
                 errorMessage = 'Pin must be at least 6 digits and no characters.';
             }
@@ -302,6 +322,16 @@ function RegistrationPage({logout}, props) {
         await Auth.signOut()
         navigate("/")
     }
+
+    const [linkVisible, setLinkVisible] = useState(false);
+
+    const handleBlur = () => {
+        setTimeout(() => {
+            setInstruction("");
+            setLinkVisible(false);
+        }, 150);
+    };
+
 
     return (
         <div>
@@ -404,25 +434,29 @@ function RegistrationPage({logout}, props) {
                                             helperText={errors.username}
                                             style={{ marginBottom: '10px' }}
                                         />
-                                                <TextField
-                                                    label="Pin"
-                                                    placeholder="111111"
-                                                    name="password"
-                                                    type="password"
-                                                    value={values.password}
-                                                    onChange={onChange}
-                                                    error={Boolean(errors.password)}
-                                                    style={{ marginBottom: '10px', width: '205px' }}
-                                                    onFocus={() => setInstruction("Enter your Banner PIN. If you do not know it, reset it ")}
-                                                    onBlur={() => setInstruction("")}
-                                                />
-                                                {errors.password && <FormHelperText error>{errors.password}</FormHelperText>}
-                                                <FormHelperText>
-                                                    {instruction}
-                                                    {instruction && (
-                                                        <Link href="https://banner.oci.yu.edu/ssb/twbkwbis.P_GenMenu?name=bmenu.P_MainMnu" target="_blank">here</Link>
-                                                    )}
-                                                </FormHelperText>
+                                        <TextField
+                                            label="Pin"
+                                            placeholder="111111"
+                                            name="password"
+                                            type="password"
+                                            value={values.password}
+                                            onChange={onChange}
+                                            error={Boolean(errors.password)}
+                                            style={{ marginBottom: '10px', width: '205px' }}
+                                            onFocus={() => {
+                                                setInstruction("Enter your Banner PIN. If you do not know it, reset it ");
+                                                setLinkVisible(true);
+                                            }}
+                                            onBlur={handleBlur}
+                                        />
+                                        {errors.password && <FormHelperText error>{errors.password}</FormHelperText>}
+                                        <FormHelperText>{instruction}</FormHelperText>
+                                        {linkVisible && (
+                                            <Link href="https://banner.oci.yu.edu/ssb/twbkwbis.P_GenMenu?name=bmenu.P_MainMnu" target="_blank">
+                                                here
+                                            </Link>
+                                        )}
+
 
                                         <LocalizationProvider dateAdapter={AdapterDateFns}>
                                                 <DatePicker
