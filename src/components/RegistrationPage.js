@@ -7,7 +7,7 @@ import {Auth} from "aws-amplify";
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from "@mui/material/Button";
-import {CircularProgress, FormHelperText, InputLabel} from "@mui/material";
+import {CircularProgress, Divider, FormHelperText, InputLabel} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
@@ -38,6 +38,15 @@ function RegistrationPage({logout}, props) {
 
 
     const [crnValues, setCrnValues] = useState({
+        crn1: null,
+        crn2: null,
+        crn3: null,
+        crn4: null,
+        crn5: null,
+        crn6: null
+    })
+
+    const [backups, setBackups] = useState({
         crn1: null,
         crn2: null,
         crn3: null,
@@ -142,7 +151,7 @@ function RegistrationPage({logout}, props) {
                 const formSecond = registrationTime.second;
                 console.log(`System time: Hours: ${hour}, Minutes: ${minute}, Seconds: ${second} days: ${day}`)
                 console.log(`Form time: Hours: ${formHour}, Minutes: ${formMinute}, Seconds: ${formSecond} days: ${formDay}`)
-                if (day >= formDay && hour >= formHour && minute >= formMinute && second > formSecond) {
+                if (day >= formDay && hour >= formHour && minute >= formMinute && second > 3) {
                     console.log("inside inner if before axios")
                     axios.get(getImgAPI + '?username=' + values.username)
                         .then(response => {
@@ -177,6 +186,12 @@ function RegistrationPage({logout}, props) {
                     crn4: crnValues.crn4,
                     crn5: crnValues.crn5,
                     crn6: crnValues.crn6,
+                    bcrn1: backups.crn1,
+                    bcrn2: backups.crn2,
+                    bcrn3: backups.crn3,
+                    bcrn4: backups.crn4,
+                    bcrn5: backups.crn5,
+                    bcrn6: backups.crn6,
                     cron: getCron()
                 }
             });
@@ -263,6 +278,14 @@ function RegistrationPage({logout}, props) {
         });
     };
 
+    const handleBackupsChange = (event) => {
+        const { name, value } = event.target;
+        setBackups({
+            ...backups,
+            [name]: value,
+        });
+    }
+
 
     const handleDateChange = (newValue) => {
         onChange({ target: { name: "date", value: newValue } });
@@ -331,6 +354,10 @@ function RegistrationPage({logout}, props) {
             setLinkVisible(false);
         }, 150);
     };
+
+    // useEffect(() => {
+    //     console.log(`Backup CRNs are: ${backups.crn1}, ${backups.crn2}, ${backups.crn3}, ${backups.crn4}, ${backups.crn5}, ${backups.crn6}`)
+    // })
 
 
     return (
@@ -418,9 +445,6 @@ function RegistrationPage({logout}, props) {
                                     }}
                                     noValidate
                                 >
-                                    <div style={{marginLeft: "650px"}}>
-                                        <SlidingInstructionModal />
-                                    </div>
 
                                     <img className="logo" src={logo} alt="Im In logo" />
 
@@ -532,6 +556,52 @@ function RegistrationPage({logout}, props) {
                                             name="crn6"
                                             value={crnValues.crn6 || ""}
                                             onChange={handleCrnChange}
+                                            style={{width: '10vh', marginLeft: '5px', textAlign: 'center'}}
+                                        />
+
+                                    </div>
+                                    <Divider>BACKUP CRNS</Divider>
+                                    <div style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap'}}>
+                                        <TextField
+                                            label="CRN"
+                                            name="crn1"
+                                            value={backups.crn1 || ""}
+                                            onChange={handleBackupsChange}
+                                            style={{width: '10vh', marginLeft: '5px', textAlign: 'center'}}
+                                        />
+                                        <TextField
+                                            label="CRN"
+                                            name="crn2"
+                                            value={backups.crn2 || ""}
+                                            onChange={handleBackupsChange}
+                                            style={{width: '10vh', marginLeft: '5px', textAlign: 'center'}}
+                                        />
+                                        <TextField
+                                            label="CRN"
+                                            name="crn3"
+                                            value={backups.crn3 || ""}
+                                            onChange={handleBackupsChange}
+                                            style={{width: '10vh', marginLeft: '5px', textAlign: 'center'}}
+                                        />
+                                        <TextField
+                                            label="CRN"
+                                            name="crn4"
+                                            value={backups.crn4 || ""}
+                                            onChange={handleBackupsChange}
+                                            style={{width: '10vh', marginLeft: '5px', textAlign: 'center'}}
+                                        />
+                                        <TextField
+                                            label="CRN"
+                                            name="crn5"
+                                            value={backups.crn5 || ""}
+                                            onChange={handleBackupsChange}
+                                            style={{width: '10vh', marginLeft: '5px', textAlign: 'center'}}
+                                        />
+                                        <TextField
+                                            label="CRN"
+                                            name="crn6"
+                                            value={backups.crn6 || ""}
+                                            onChange={handleBackupsChange}
                                             style={{width: '10vh', marginLeft: '5px', textAlign: 'center'}}
                                         />
 

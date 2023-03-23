@@ -123,16 +123,16 @@ export default function SignInSide({loginUser}) {
                             >
                                 Sign In
                             </Button>
-                            {/*<Subscribe />*/}
-                            <Button
-                                onClick={gotoAgreement}
-                                type="submit"
-                                fullWidth
-                                variant="contained"
-                                sx={{ mt: 3, mb: 2 }}
-                            >
-                                Sign Up
-                            </Button>
+                            <Subscribe />
+                            {/*<Button*/}
+                            {/*    onClick={gotoAgreement}*/}
+                            {/*    type="submit"*/}
+                            {/*    fullWidth*/}
+                            {/*    variant="contained"*/}
+                            {/*    sx={{ mt: 3, mb: 2 }}*/}
+                            {/*>*/}
+                            {/*    Sign Up*/}
+                            {/*</Button>*/}
                             <Copyright sx={{ mt: 5 }} />
                         </Box>
                     </Box>

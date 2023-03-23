@@ -39,7 +39,7 @@ export default function Subscribe() {
     return (
         <Button
             onClick={handleClick}
-            // fullWidth
+            fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2,}}
 

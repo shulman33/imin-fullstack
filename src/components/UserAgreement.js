@@ -35,7 +35,7 @@ export default function UserAgreement() {
                 backgroundColor: '#f5f5f5',
             }}
         >
-            <Paper sx={{height: '200px', width: '600px', overflow: 'auto',}} elevation={3}>
+            <Paper sx={{height: '600px', width: '600px', overflow: 'auto',}} elevation={3}>
                 <Stack sx={{marginTop: '20px', marginLeft: '40px'}} direction={"row"} spacing={28}>
                     <Typography variant="h4" sx={{fontWeight: 'bold'}} >
                         User Agreement
@@ -47,48 +47,57 @@ export default function UserAgreement() {
                         1. Introduction
                     </Typography>
                     <Typography variant="h7" >
-                        ImIn provides a platform that allows users to connect with Yeshiva University and register for classes.
-                        By accessing or using ImIn, you agree to be bound by the terms and conditions of this User Agreement.
+                        This Terms of Service Agreement ("Agreement") is entered into by and between you, the user, and Sam Shulman,
+                        the owner of the ImIn Software ("Software").
+                        By using the Software, you agree to be bound by the terms and conditions outlined in this Agreement.
+                        If you do not agree to these terms, you may not use the Software.
                     </Typography>
                     <Typography variant="h6"  >
-                        2. No Guarantee of Class Availability
+                        2. Eligibility
                     </Typography>
                     <Typography variant="h7" >
-                        ImIn does not guarantee that you will be able to register for the classes you desire.
-                        ImIn makes no representations or warranties regarding the availability of any classes.
+                        The Software is intended for use by Yeshiva University students who are currently enrolled and seeking to register for classes at Yeshiva University.
+                        By using the Software, you represent and warrant that you are a Yeshiva University student and meet this eligibility requirement.
                     </Typography>
                     <Typography variant="h6"  >
-                        3. No Refund Policy
+                        3. License and Restrictions
                     </Typography>
                     <Typography variant="h7" >
-                        ImIn does not provide refunds for any fees or charges related to classes or the use of the ImIn platform.
+                        a. Modify, copy, distribute, or reverse engineer the Software;
+                        b. Use the Software for any illegal or unauthorized purpose;
+                        c. Use the Software in a manner that violates any applicable law or regulation;
+                        d. Use the Software to infringe on the rights of others, including intellectual property rights; or
+                        e. Sell, rent, lease, or sublicense the Software to any third party.
                     </Typography>
                     <Typography variant="h6"  >
-                        4. Limitation of Liability
+                        4. Account Suspension and Termination
                     </Typography>
                     <Typography variant="h7" >
-                        ImIn shall not be liable for any damages arising from the inability of a user to register for a class,
-                        including but not limited to any direct, indirect, incidental, special, or consequential damages.
+                        We reserve the right, in our sole discretion, to suspend or permanently remove your account without notice or refund for any reason,
+                        including but not limited to, breach of this Agreement or any applicable law.
                     </Typography>
                     <Typography variant="h6"  >
-                        5. Changes to the User Agreement
+                        5. No Guarantee and No Refunds
                     </Typography>
                     <Typography variant="h7" >
-                        ImIn reserves the right to modify this User Agreement at any time.
-                        Continued use of the ImIn platform after any such changes shall constitute your consent to such changes.
+                        We do not guarantee that you will successfully register for any specific class using the Software.
+                        We make no representations or warranties regarding the availability or accessibility of any particular class during the registration process.
+                        We do not offer refunds under any circumstances, including but not limited to, your inability to register for a desired class, suspension or removal of your account,
+                        or dissatisfaction with the Software.
                     </Typography>
                     <Typography variant="h6"  >
-                        6. Governing Law
+                        6. Governing Law and Jurisdiction
                     </Typography>
                     <Typography variant="h7" >
-                        This User Agreement shall be governed by and construed in accordance with the laws of the jurisdiction in which ImIn is located.
+                        This Agreement shall be governed by and construed in accordance with the laws of the state in which Yeshiva University is located,
+                        without regard to its conflict of law provisions. Any dispute arising from this Agreement shall be resolved exclusively in the courts located within that state.
                     </Typography>
                     <Typography variant="h6"  >
-                        7. Entire Agreement
+                        7. Amendments
                     </Typography>
                     <Typography variant="h7" >
-                        This User Agreement constitutes the entire agreement between you and ImIn and supersedes all prior and contemporaneous agreements,
-                        representations, warranties, and understandings.
+                        We reserve the right to modify or update this Agreement at any time, and you agree to be bound by any such modifications or updates.
+                        It is your responsibility to periodically review this Agreement to stay informed of any changes.
                     </Typography>
                     <Typography variant="h7" >
                         By using ImIn, you acknowledge that you have read, understood, and agree to be bound by the terms and conditions of this User Agreement.
@@ -96,9 +105,10 @@ export default function UserAgreement() {
                 </Box>
 
 
-                <Stack sx={{marginTop: '40px', marginLeft: '40px'}} direction={"row"} spacing={6}>
-                    <FormControlLabel control={<Checkbox onChange={(event) => setChecked(event.target.checked)} />} label="I Agree"  />
-                    {checked && <Subscribe />}
+                <Stack sx={{marginTop: '40px', marginLeft: '40px'}} direction={"column"} spacing={6}>
+                    {/*<FormControlLabel control={<Checkbox onChange={(event) => setChecked(event.target.checked)} />} label="I Agree"  />*/}
+                    {/*{checked && <Subscribe />}*/}
+                    <Subscribe />
                     <Button type="submit" onClick={goBack} variant="outlined" style={{fontWeight: 'bold'}} >Back</Button>
                 </Stack>
 
