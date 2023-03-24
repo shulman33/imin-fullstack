@@ -14,7 +14,10 @@ import {useState} from "react";
 import logo from '../assests/ImIn-logos/ImIn-logos.jpeg'
 import {useNavigate} from "react-router-dom";
 import Alert from "@mui/material/Alert";
-import {registrationTime} from "./RegistrationPage";
+import {InputAdornment} from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 function Copyright(props) {
     return (
@@ -33,12 +36,17 @@ const theme = createTheme();
 
 export default function SignInSide({loginUser}) {
     const [errorMessage, setErrorMessage] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
 
     async function login(e){
         e.preventDefault();
         try{
             const user = await Auth.signIn(username, password);
+            if (user.challengeName === 'NEW_PASSWORD_REQUIRED'){
+                navigate("/resetpassword")
+                return
+            }
             loginUser(user);
             console.log('user: ' + user);
             localStorage.setItem('user', JSON.stringify(user))
@@ -48,12 +56,6 @@ export default function SignInSide({loginUser}) {
             setErrorMessage('Incorrect username or password');
         }
     }
-
-    const gotoAgreement = (e) =>{
-        e.preventDefault()
-        navigate("/useragreement")
-    }
-
 
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
@@ -109,10 +111,22 @@ export default function SignInSide({loginUser}) {
                                 fullWidth
                                 name="password"
                                 label="Password"
-                                type="password"
+                                type={showPassword ? 'text' : 'password'}
                                 id="password"
                                 autoComplete="current-password"
                                 onChange={e => setPassword(e.target.value)}
+                                InputProps={{
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                onClick={() => setShowPassword((prev) => !prev)}
+                                                edge="end"
+                                            >
+                                                {showPassword ? <VisibilityOff /> : <Visibility />}
+                                            </IconButton>
+                                        </InputAdornment>
+                                    ),
+                                }}
                             />
                             <Button
                                 onClick={login}
@@ -124,15 +138,6 @@ export default function SignInSide({loginUser}) {
                                 Sign In
                             </Button>
                             <Subscribe />
-                            {/*<Button*/}
-                            {/*    onClick={gotoAgreement}*/}
-                            {/*    type="submit"*/}
-                            {/*    fullWidth*/}
-                            {/*    variant="contained"*/}
-                            {/*    sx={{ mt: 3, mb: 2 }}*/}
-                            {/*>*/}
-                            {/*    Sign Up*/}
-                            {/*</Button>*/}
                             <Copyright sx={{ mt: 5 }} />
                         </Box>
                     </Box>

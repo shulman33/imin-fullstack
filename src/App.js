@@ -30,7 +30,7 @@ function App() {
             {!user && <Route path="/" element={<SignInSide loginUser={() => setUser(true)} />} />}}
             {user && <Route path="bot" element={<RegistrationPage logout={() => setUser(false)}/>} />}
             <Route path="resetpassword" element={<ForceReset setIsLoggedIn={() => setUser(true)}/>} />
-            <Route path="cancelsubscription" element={<CancelSubscription/>} />
+            <Route path="cancelsubscription" element={<CancelSubscription logout={() => setUser(false)}/>} />
             <Route path="useragreement" element={<UserAgreement/>} />
             <Route path="*" element={<Navigate to={user ? "/bot" : "/"} />} />
           </Routes>

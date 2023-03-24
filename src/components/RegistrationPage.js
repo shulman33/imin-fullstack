@@ -23,6 +23,10 @@ import {TimePicker} from '@mui/x-date-pickers/TimePicker';
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import InfoAlert from "./InfoAlert";
+import {InputAdornment} from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 let api = 'https://pgclq90efg.execute-api.us-east-1.amazonaws.com/beta/schedule-registration'
 let getImgAPI = 'https://pgclq90efg.execute-api.us-east-1.amazonaws.com/beta/get-screenshot'
@@ -56,6 +60,8 @@ function RegistrationPage({logout}, props) {
     })
 
     const [alert, setAlert] = useState(false);
+
+    const [showPassword, setShowPassword] = useState(false);
 
     const [imageUrl, setImageUrl] = useState('');
 
@@ -295,8 +301,8 @@ function RegistrationPage({logout}, props) {
         onChange({ target: { name: "time", value: newValue } });
     };
 
-    const hasAtLeastOneCrn = () => {
-        return Object.values(crnValues).some((crn) => crn !== null && crn !== "");
+    const hasCrn1Filled = () => {
+        return crnValues.crn1 !== null && crnValues.crn1 !== "";
     };
 
 
@@ -307,7 +313,7 @@ function RegistrationPage({logout}, props) {
         const requiredFields = ['username', 'password', 'time', 'date'];
         const hasEmptyFields = requiredFields.some((field) => !values[field]);
 
-        return !hasErrors && !hasEmptyFields && hasAtLeastOneCrn();
+        return !hasErrors && !hasEmptyFields && hasCrn1Filled();
     };
 
     const getCron = () => {
@@ -432,57 +438,75 @@ function RegistrationPage({logout}, props) {
                                 <CircularProgress />
                             </Box>
                         ) : (
-                            <div>
-                                <Box
-                                    component="form"
-                                    onSubmit={handleSubmit}
-                                    sx={{
-                                        '@media (max-width: 430px, max-height: 932px)': {
-                                            height: '50%',
-                                            width: '30%',
-                                        },
-                                        '& .MuiTextField-root': { m: 1, width: '25ch' },
-                                    }}
-                                    noValidate
+                            <div style={{ height: '100%', width: '100%' }}>
+                                <Grid
+                                    container
+                                    direction="column"
+                                    justifyContent="center"
+                                    alignItems="center"
+                                    style={{ height: '100%', width: '100%' }}
                                 >
+                                    <Box
+                                        component="form"
+                                        onSubmit={handleSubmit}
+                                        sx={{
+                                            '@media (max-width: 430px)': {
+                                                width: '90%',
+                                            },
+                                            '& .MuiTextField-root': { m: 1 },
+                                        }}
+                                        noValidate
+                                    >
 
-                                    <img className="logo" src={logo} alt="Im In logo" />
+                                        <img className="logo" src={logo} alt="Im In logo" />
 
-                                    <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
-                                        <TextField
-                                            label="800 Number"
-                                            name="username"
-                                            value={values.username}
-                                            onChange={onChange}
-                                            error={Boolean(errors.username)}
-                                            helperText={errors.username}
-                                            style={{ marginBottom: '10px' }}
-                                        />
-                                        <TextField
-                                            label="Pin"
-                                            placeholder="111111"
-                                            name="password"
-                                            type="password"
-                                            value={values.password}
-                                            onChange={onChange}
-                                            error={Boolean(errors.password)}
-                                            style={{ marginBottom: '10px', width: '205px' }}
-                                            onFocus={() => {
-                                                setInstruction("Enter your Banner PIN. If you do not know it, reset it ");
-                                                setLinkVisible(true);
-                                            }}
-                                            onBlur={handleBlur}
-                                        />
-                                        {errors.password && <FormHelperText error>{errors.password}</FormHelperText>}
-                                        <FormHelperText>{instruction}</FormHelperText>
-                                        {linkVisible && (
-                                            <Link href="https://banner.oci.yu.edu/ssb/twbkwbis.P_GenMenu?name=bmenu.P_MainMnu" target="_blank">
-                                                here
-                                            </Link>
-                                        )}
+                                        <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+                                            <TextField
+                                                label="800 Number"
+                                                name="username"
+                                                value={values.username}
+                                                onChange={onChange}
+                                                error={Boolean(errors.username)}
+                                                helperText={errors.username}
+                                                style={{ marginBottom: '10px', width: '205px' }}
+                                            />
+                                            <TextField
+                                                label="Pin"
+                                                placeholder="111111"
+                                                name="password"
+                                                type={showPassword ? 'text' : 'password'}
+                                                value={values.password}
+                                                onChange={onChange}
+                                                InputProps={{
+                                                    endAdornment: (
+                                                        <InputAdornment position="end">
+                                                            <IconButton
+                                                                onClick={() => setShowPassword((prev) => !prev)}
+                                                                edge="end"
+                                                            >
+                                                                {showPassword ? <VisibilityOff /> : <Visibility />}
+                                                            </IconButton>
+                                                        </InputAdornment>
+                                                    ),
+                                                }}
+                                                error={Boolean(errors.password)}
+                                                style={{ marginBottom: '10px', width: '205px' }}
+                                                onFocus={() => {
+                                                    setInstruction("Enter your Banner PIN. If you do not know it, reset it ");
+                                                    setLinkVisible(true);
+                                                }}
+                                                onBlur={handleBlur}
+                                            />
+                                            {errors.password && <FormHelperText error>{errors.password}</FormHelperText>}
+                                            <FormHelperText>{instruction}</FormHelperText>
+                                            {linkVisible && (
+                                                <Link href="https://banner.oci.yu.edu/ssb/twbkwbis.P_GenMenu?name=bmenu.P_MainMnu" target="_blank">
+                                                    here
+                                                </Link>
+                                            )}
 
 
-                                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                            <LocalizationProvider dateAdapter={AdapterDateFns}>
                                                 <DatePicker
                                                     label="Registration Date"
                                                     name="date"
@@ -497,119 +521,146 @@ function RegistrationPage({logout}, props) {
                                                         />
                                                     )}
                                                 />
-                                        </LocalizationProvider>
-                                        <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                            <TimePicker
-                                                label="Registration Time"
-                                                name="date"
-                                                value={values.time}
-                                                onChange={handleTimeChange}
-                                                renderInput={(params) => (
-                                                    <TextField
-                                                        {...params}
-                                                        error={Boolean(errors.time)}
-                                                        helperText={errors.time}
-                                                        style={{ marginBottom: "10px" }}
-                                                    />
-                                                )}
-                                            />
-                                        </LocalizationProvider>
-                                    </div>
-                                    <div style={{display: 'flex', flexDirection: 'row', marginTop: '3vh', flexWrap: 'wrap'}}>
-                                        <TextField
-                                            label="CRN"
-                                            name="crn1"
-                                            value={crnValues.crn1 || ""}
-                                            onChange={handleCrnChange}
-                                            style={{width: '10vh', marginLeft: '5px', textAlign: 'center'}}
-                                        />
-                                        <TextField
-                                            label="CRN"
-                                            name="crn2"
-                                            value={crnValues.crn2 || ""}
-                                            onChange={handleCrnChange}
-                                            style={{width: '10vh', marginLeft: '5px', textAlign: 'center'}}
-                                        />
-                                        <TextField
-                                            label="CRN"
-                                            name="crn3"
-                                            value={crnValues.crn3 || ""}
-                                            onChange={handleCrnChange}
-                                            style={{width: '10vh', marginLeft: '5px', textAlign: 'center'}}
-                                        />
-                                        <TextField
-                                            label="CRN"
-                                            name="crn4"
-                                            value={crnValues.crn4 || ""}
-                                            onChange={handleCrnChange}
-                                            style={{width: '10vh', marginLeft: '5px', textAlign: 'center'}}
-                                        />
-                                        <TextField
-                                            label="CRN"
-                                            name="crn5"
-                                            value={crnValues.crn5 || ""}
-                                            onChange={handleCrnChange}
-                                            style={{width: '10vh', marginLeft: '5px', textAlign: 'center'}}
-                                        />
-                                        <TextField
-                                            label="CRN"
-                                            name="crn6"
-                                            value={crnValues.crn6 || ""}
-                                            onChange={handleCrnChange}
-                                            style={{width: '10vh', marginLeft: '5px', textAlign: 'center'}}
-                                        />
+                                            </LocalizationProvider>
+                                            <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                                <TimePicker
+                                                    label="Registration Time"
+                                                    name="date"
+                                                    value={values.time}
+                                                    onChange={handleTimeChange}
+                                                    renderInput={(params) => (
+                                                        <TextField
+                                                            {...params}
+                                                            error={Boolean(errors.time)}
+                                                            helperText={errors.time}
+                                                            style={{ marginBottom: "10px" }}
+                                                        />
+                                                    )}
+                                                />
+                                            </LocalizationProvider>
+                                        </div>
+                                        <Grid container spacing={1} justifyContent="center" style={{ marginTop: '2vh' }}>
+                                            <Grid item xs={12} sm={4} md={2}>
+                                                <TextField
+                                                    label="CRN1"
+                                                    name="crn1"
+                                                    value={crnValues.crn1 || ""}
+                                                    onChange={handleCrnChange}
+                                                    style={{width: '10vh', marginLeft: '5px', textAlign: 'center'}}
+                                                />
+                                            </Grid>
 
-                                    </div>
-                                    <Divider>BACKUP CRNS</Divider>
-                                    <div style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap'}}>
-                                        <TextField
-                                            label="CRN"
-                                            name="crn1"
-                                            value={backups.crn1 || ""}
-                                            onChange={handleBackupsChange}
-                                            style={{width: '10vh', marginLeft: '5px', textAlign: 'center'}}
-                                        />
-                                        <TextField
-                                            label="CRN"
-                                            name="crn2"
-                                            value={backups.crn2 || ""}
-                                            onChange={handleBackupsChange}
-                                            style={{width: '10vh', marginLeft: '5px', textAlign: 'center'}}
-                                        />
-                                        <TextField
-                                            label="CRN"
-                                            name="crn3"
-                                            value={backups.crn3 || ""}
-                                            onChange={handleBackupsChange}
-                                            style={{width: '10vh', marginLeft: '5px', textAlign: 'center'}}
-                                        />
-                                        <TextField
-                                            label="CRN"
-                                            name="crn4"
-                                            value={backups.crn4 || ""}
-                                            onChange={handleBackupsChange}
-                                            style={{width: '10vh', marginLeft: '5px', textAlign: 'center'}}
-                                        />
-                                        <TextField
-                                            label="CRN"
-                                            name="crn5"
-                                            value={backups.crn5 || ""}
-                                            onChange={handleBackupsChange}
-                                            style={{width: '10vh', marginLeft: '5px', textAlign: 'center'}}
-                                        />
-                                        <TextField
-                                            label="CRN"
-                                            name="crn6"
-                                            value={backups.crn6 || ""}
-                                            onChange={handleBackupsChange}
-                                            style={{width: '10vh', marginLeft: '5px', textAlign: 'center'}}
-                                        />
+                                            <Grid item xs={12} sm={4} md={2}>
+                                                <TextField
+                                                    label="CRN2"
+                                                    name="crn2"
+                                                    value={crnValues.crn2 || ""}
+                                                    onChange={handleCrnChange}
+                                                    style={{width: '10vh', marginLeft: '5px', textAlign: 'center'}}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12} sm={4} md={2}>
+                                                <TextField
+                                                    label="CRN3"
+                                                    name="crn3"
+                                                    value={crnValues.crn3 || ""}
+                                                    onChange={handleCrnChange}
+                                                    style={{width: '10vh', marginLeft: '5px', textAlign: 'center'}}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12} sm={4} md={2}>
+                                                <TextField
+                                                    label="CRN4"
+                                                    name="crn4"
+                                                    value={crnValues.crn4 || ""}
+                                                    onChange={handleCrnChange}
+                                                    style={{width: '10vh', marginLeft: '5px', textAlign: 'center'}}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12} sm={4} md={2}>
+                                                <TextField
+                                                    label="CRN5"
+                                                    name="crn5"
+                                                    value={crnValues.crn5 || ""}
+                                                    onChange={handleCrnChange}
+                                                    style={{width: '10vh', marginLeft: '5px', textAlign: 'center'}}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12} sm={4} md={2}>
+                                                <TextField
+                                                    label="CRN6"
+                                                    name="crn6"
+                                                    value={crnValues.crn6 || ""}
+                                                    onChange={handleCrnChange}
+                                                    style={{width: '10vh', marginLeft: '5px', textAlign: 'center'}}
+                                                />
+                                            </Grid>
 
-                                    </div>
-                                    <div style={{marginTop: '2vh'}}>
-                                        <Button type="submit" disabled={!isValidForm()} variant="contained" fullWidth style={{fontWeight: 'bold'}}>Submit</Button>
-                                    </div>
-                                </Box>
+                                        </Grid>
+                                        <Divider>BACKUP CRNS</Divider>
+                                        <Grid container spacing={1} justifyContent="center">
+                                            <Grid item xs={12} sm={4} md={2}>
+                                                <TextField
+                                                    label="CRN1"
+                                                    name="crn1"
+                                                    value={backups.crn1 || ""}
+                                                    onChange={handleBackupsChange}
+                                                    style={{width: '10vh', marginLeft: '5px', textAlign: 'center'}}
+                                                />
+                                            </Grid>
+
+                                            <Grid item xs={12} sm={4} md={2}>
+                                                <TextField
+                                                    label="CRN2"
+                                                    name="crn2"
+                                                    value={backups.crn2 || ""}
+                                                    onChange={handleBackupsChange}
+                                                    style={{width: '10vh', marginLeft: '5px', textAlign: 'center'}}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12} sm={4} md={2}>
+                                                <TextField
+                                                    label="CRN3"
+                                                    name="crn3"
+                                                    value={backups.crn3 || ""}
+                                                    onChange={handleBackupsChange}
+                                                    style={{width: '10vh', marginLeft: '5px', textAlign: 'center'}}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12} sm={4} md={2}>
+                                                <TextField
+                                                    label="CRN4"
+                                                    name="crn4"
+                                                    value={backups.crn4 || ""}
+                                                    onChange={handleBackupsChange}
+                                                    style={{width: '10vh', marginLeft: '5px', textAlign: 'center'}}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12} sm={4} md={2}>
+                                                <TextField
+                                                    label="CRN5"
+                                                    name="crn5"
+                                                    value={backups.crn5 || ""}
+                                                    onChange={handleBackupsChange}
+                                                    style={{width: '10vh', marginLeft: '5px', textAlign: 'center'}}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12} sm={4} md={2}>
+                                                <TextField
+                                                    label="CRN6"
+                                                    name="crn6"
+                                                    value={backups.crn6 || ""}
+                                                    onChange={handleBackupsChange}
+                                                    style={{width: '10vh', marginLeft: '5px', textAlign: 'center'}}
+                                                />
+                                            </Grid>
+
+                                        </Grid>
+                                        <div style={{marginTop: '2vh'}}>
+                                            <Button type="submit" disabled={!isValidForm()} variant="contained" fullWidth style={{fontWeight: 'bold'}}>Submit</Button>
+                                        </div>
+                                    </Box>
+                                </Grid>
                             </div>
                         )}
                     </>
