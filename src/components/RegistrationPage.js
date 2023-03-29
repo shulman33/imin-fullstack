@@ -7,14 +7,13 @@ import {Auth} from "aws-amplify";
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from "@mui/material/Button";
-import {CircularProgress, Divider, FormHelperText, InputLabel} from "@mui/material";
+import {CircularProgress, Divider, FormHelperText} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import axios from 'axios';
 import '../aws-config';
 import BackButton from "./BackButton";
-import SlidingInstructionModal from "./SlidingInstructionPopup";
 import CustomMenu from "./Menu"
 import {LocalizationProvider} from '@mui/x-date-pickers';
 import {AdapterDateFns} from '@mui/x-date-pickers/AdapterDateFns';
@@ -27,12 +26,13 @@ import {InputAdornment} from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import SuccessMessage from "./SuccessMessage";
 
 let api = 'https://pgclq90efg.execute-api.us-east-1.amazonaws.com/beta/schedule-registration'
 let getImgAPI = 'https://pgclq90efg.execute-api.us-east-1.amazonaws.com/beta/get-screenshot'
 
 
-function RegistrationPage({logout}, props) {
+function RegistrationPage({logout}) {
     const [values, setValues] = useState({
         username: "",
         password: "",
@@ -143,8 +143,6 @@ function RegistrationPage({logout}, props) {
 
     useEffect(() => {
         const intervalId = setInterval(() => {
-            // console.log("running useEffect")
-            // console.log(`inside useeffect ${registrationTime.day}, ${registrationTime.hour}, ${registrationTime.min}, ${registrationTime.second}`)
             if (registrationTime.day) {
                 const currentTime = new Date();
                 const day = currentTime.getDate();
@@ -157,7 +155,7 @@ function RegistrationPage({logout}, props) {
                 const formSecond = registrationTime.second;
                 console.log(`System time: Hours: ${hour}, Minutes: ${minute}, Seconds: ${second} days: ${day}`)
                 console.log(`Form time: Hours: ${formHour}, Minutes: ${formMinute}, Seconds: ${formSecond} days: ${formDay}`)
-                if (day >= formDay && hour >= formHour && minute >= formMinute && second > 3) {
+                if (day >= formDay && hour >= formHour && minute >= formMinute && second > 1) {
                     console.log("inside inner if before axios")
                     axios.get(getImgAPI + '?username=' + values.username)
                         .then(response => {
@@ -225,7 +223,7 @@ function RegistrationPage({logout}, props) {
             min: time.getMinutes(),
             second: time.getSeconds(),
         })
-        callAPI().then(r => {
+        callAPI().then(() => {
             if (!badAPICall){
                 console.log("Succesfull call to API")
                 setAlert(true);
@@ -336,7 +334,7 @@ function RegistrationPage({logout}, props) {
             min: 0,
             second: 0
         })
-        axios.delete(getImgAPI + '?number=' + values.username).then(r => {
+        axios.delete(getImgAPI + '?number=' + values.username).then(() => {
             console.log("deleted")
         }).catch(error => {
             console.error(error);
@@ -361,20 +359,19 @@ function RegistrationPage({logout}, props) {
         }, 150);
     };
 
-    // useEffect(() => {
-    //     console.log(`Backup CRNs are: ${backups.crn1}, ${backups.crn2}, ${backups.crn3}, ${backups.crn4}, ${backups.crn5}, ${backups.crn6}`)
-    // })
-
+    const handleCloseSnackbar = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setAlert(false);
+    };
 
     return (
         <div>
             <CustomMenu logout={handleLogout}/>
             <InfoAlert/>
             {alert && !badAPICall &&
-                <Alert severity="success">
-                    <AlertTitle>Success</AlertTitle>
-                    The bot is running - come back later to see your classes
-                </Alert>
+                <SuccessMessage alert={alert} handleCloseSnackbar={handleCloseSnackbar}/>
             }
             {badAPICall &&
                 <Alert severity="error">

@@ -10,6 +10,7 @@ import {
 import ForceReset from "./components/ForceReset";
 import CancelSubscription from "./components/CancelSubscription";
 import UserAgreement from "./components/UserAgreement";
+import CustomerFeedbackForm from "./components/CustomerFeedbackForm";
 
 function App() {
 
@@ -32,6 +33,7 @@ function App() {
             <Route path="resetpassword" element={<ForceReset setIsLoggedIn={() => setUser(true)}/>} />
             <Route path="cancelsubscription" element={<CancelSubscription logout={() => setUser(false)}/>} />
             <Route path="useragreement" element={<UserAgreement/>} />
+            <Route path="feedback" element={<CustomerFeedbackForm/>} />
             <Route path="*" element={<Navigate to={user ? "/bot" : "/"} />} />
           </Routes>
         </div>
