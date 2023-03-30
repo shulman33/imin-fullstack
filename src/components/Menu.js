@@ -22,6 +22,9 @@ export default function CustomMenu({logout}){
     const toCancelPage = () => {
         navigate("/cancelsubscription")
     };
+    const toFeedbackPage = () => {
+        navigate("/feedback")
+    }
 
     return(
         <div>
@@ -78,6 +81,9 @@ export default function CustomMenu({logout}){
                         >
                             <MenuItem onClick={handleClose}>
                                 <Button color="inherit" onClick={logout}>Logout</Button>
+                            </MenuItem>
+                            <MenuItem onClick={handleClose}>
+                                <Button color="inherit" onClick={toFeedbackPage}>Give us Feedback</Button>
                             </MenuItem>
                             <MenuItem onClick={handleClose}>
                                 <Button onClick={toCancelPage} color="inherit">Cancel Subscription</Button>

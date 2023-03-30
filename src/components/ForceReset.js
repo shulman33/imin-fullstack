@@ -32,7 +32,7 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-export default function ForceReset({setIsLoggedIn}) {
+export default function ForceReset({loginUser}) {
     const [username, setUsername] = useState('')
     const [temp, setTemp] = useState('')
     const [newPassword, setNewPassword] = useState('')
@@ -54,7 +54,7 @@ export default function ForceReset({setIsLoggedIn}) {
                     ).then(user => {
                         // at this time the user is logged in if no MFA required
                         console.log(user);
-                        setIsLoggedIn(user);
+                        loginUser(user);
                         localStorage.setItem('user', JSON.stringify(user))
                         navigate("/bot")
                     }).catch(e => {

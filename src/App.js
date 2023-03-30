@@ -10,6 +10,20 @@ import {
 import ForceReset from "./components/ForceReset";
 import CancelSubscription from "./components/CancelSubscription";
 import UserAgreement from "./components/UserAgreement";
+import CustomerFeedbackForm from "./components/CustomerFeedbackForm";
+import LandingPage from "./components/LandingPage";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#0d47a1',
+    },
+    secondary: {
+      main: '#ffffff',
+    },
+  },
+});
 
 function App() {
 
@@ -24,17 +38,21 @@ function App() {
   }, []);
 
   return (
-
+      <ThemeProvider theme={theme}>
         <div>
           <Routes>
-            {!user && <Route path="/" element={<SignInSide loginUser={() => setUser(true)} />} />}}
+            {/*{!user && <Route path="/" element={<SignInSide loginUser={() => setUser(true)} />} />}}*/}
+            {!user && <Route path="/" element={<LandingPage/>} />}}
             {user && <Route path="bot" element={<RegistrationPage logout={() => setUser(false)}/>} />}
-            <Route path="resetpassword" element={<ForceReset setIsLoggedIn={() => setUser(true)}/>} />
+            <Route path="/login" element={<SignInSide loginUser={() => setUser(true)} />} />
+            <Route path="resetpassword" element={<ForceReset loginUser={() => setUser(true)}/>} />
             <Route path="cancelsubscription" element={<CancelSubscription logout={() => setUser(false)}/>} />
             <Route path="useragreement" element={<UserAgreement/>} />
+            <Route path="feedback" element={<CustomerFeedbackForm/>} />
             <Route path="*" element={<Navigate to={user ? "/bot" : "/"} />} />
           </Routes>
         </div>
+      </ThemeProvider>
 
 
 
