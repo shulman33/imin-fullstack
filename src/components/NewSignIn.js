@@ -138,9 +138,6 @@ export default function SignInSide({loginUser}) {
                                 Sign In
                             </Button>
                             <Subscribe />
-                            <Typography component="h1" variant="h5">
-                                Beat the competition and register for the classes you want!
-                            </Typography>
                             <Copyright sx={{ mt: 5 }} />
                         </Box>
                     </Box>
