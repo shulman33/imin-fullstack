@@ -1,11 +1,13 @@
 import React from 'react';
-import {AppBar, Toolbar, Typography, Button, Container, Grid, Box, Card, CardContent, Paper} from '@mui/material';
+import {AppBar, Toolbar, Typography, Button, Container, Grid, Box, Card, CardContent} from '@mui/material';
 import { styled } from '@mui/system';
 import dateNTime from '../assests/date-and-time.gif'
 import crns from '../assests/crns.gif'
 import screenshot from '../assests/screenshot.gif'
 import {useNavigate} from "react-router-dom";
 import { Rating } from '@mui/lab';
+import { useMediaQuery } from '@mui/material';
+
 
 
 const Root = styled('div')(({ theme }) => ({
@@ -35,11 +37,13 @@ const Title = styled(Typography)(({ theme }) => ({
     fontWeight: 'bold',
     marginBottom: theme.spacing(2),
     color: '#ffffff',
+    textShadow: '1px 1px 2px rgba(0, 0, 0, 0.5)',
 }));
 
 const Subtitle = styled(Typography)(({ theme }) => ({
     marginBottom: theme.spacing(4),
     color: '#ffffff',
+    textShadow: '1px 1px 2px rgba(0, 0, 0, 0.5)',
 }));
 
 const CTAButton = styled(Button)(({ theme }) => ({
@@ -109,7 +113,6 @@ const ReviewRating = styled(Rating)(({ theme }) => ({
 const ReviewCard = styled(Card)(({ theme }) => ({
     padding: theme.spacing(2),
     marginBottom: theme.spacing(2),
-    marginLeft: theme.spacing(6),
     backgroundColor: theme.palette.primary.main,
     color: theme.palette.primary.contrastText,
 }));
@@ -124,13 +127,15 @@ const ReviewText = styled(Typography)(({ theme }) => ({
 }));
 
 const FeaturedReviewsSection = styled(Typography)(({ theme }) => ({
-    marginLeft: theme.spacing(6),
     color: '#ffffff',
+    textShadow: '1px 1px 2px rgba(0, 0, 0, 0.5)',
 }));
 
 
 
 function LandingPage() {
+    const matches = useMediaQuery(theme => theme.breakpoints.down('sm'));
+    const titleColor = matches ? '#e0f0ff' : '#ffffff';
     const navigate = useNavigate();
 
     const handleLogin = () => {
@@ -154,10 +159,10 @@ function LandingPage() {
             <MainSection maxWidth="lg">
                 <Grid container spacing={4} justifyContent="center" alignItems="center">
                     <Grid item xs={12} md={6}>
-                        <Title variant="h3" component="h1">
+                        <Title variant="h3" component="h1" style={{ color: titleColor }}>
                             Register for Yeshiva University classes faster than ever
                         </Title>
-                        <Subtitle variant="h6" component="p">
+                        <Subtitle variant="h6" component="p" style={{ color: titleColor }}>
                             Be the student who got that last spot. Don't miss out on the courses you need register in approximately one second or less!
                         </Subtitle>
                         <CTAButton variant="contained" size="large" onClick={handleLogin}>
@@ -165,7 +170,7 @@ function LandingPage() {
                         </CTAButton>
                     </Grid>
                     <Grid item xs={12} md={6}>
-                        <FeaturedReviewsSection variant="h4" component="h3" mb={2}>
+                        <FeaturedReviewsSection variant="h4" component="h3" mb={2} style={{ color: titleColor }}>
                             Featured Reviews
                         </FeaturedReviewsSection>
                         <ReviewCard>
