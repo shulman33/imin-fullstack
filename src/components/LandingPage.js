@@ -1,11 +1,11 @@
 import React from 'react';
-import {AppBar, Toolbar, Typography, Button, Container, Grid, Box, Card, CardContent} from '@mui/material';
+import {AppBar, Toolbar, Typography, Button, Container, Grid, Box, Card, CardContent, Paper} from '@mui/material';
 import { styled } from '@mui/system';
-import landingPageIllustration from '../assests/ImIn-logos/ImIn-logos_black.png'
 import dateNTime from '../assests/date-and-time.gif'
 import crns from '../assests/crns.gif'
 import screenshot from '../assests/screenshot.gif'
 import {useNavigate} from "react-router-dom";
+import { Rating } from '@mui/lab';
 
 
 const Root = styled('div')(({ theme }) => ({
@@ -100,6 +100,34 @@ const PriceDescription = styled(Typography)(({ theme }) => ({
     marginBottom: theme.spacing(2),
 }));
 
+const ReviewRating = styled(Rating)(({ theme }) => ({
+    marginBottom: theme.spacing(1),
+    marginLeft: theme.spacing(1),
+}));
+
+
+const ReviewCard = styled(Card)(({ theme }) => ({
+    padding: theme.spacing(2),
+    marginBottom: theme.spacing(2),
+    marginLeft: theme.spacing(6),
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.primary.contrastText,
+}));
+
+const ReviewerName = styled(Typography)(({ theme }) => ({
+    fontWeight: 'bold',
+    marginBottom: theme.spacing(1),
+}));
+
+const ReviewText = styled(Typography)(({ theme }) => ({
+    marginBottom: theme.spacing(1),
+}));
+
+const FeaturedReviewsSection = styled(Typography)(({ theme }) => ({
+    marginLeft: theme.spacing(6),
+    color: '#ffffff',
+}));
+
 
 
 function LandingPage() {
@@ -137,12 +165,42 @@ function LandingPage() {
                         </CTAButton>
                     </Grid>
                     <Grid item xs={12} md={6}>
-                        <Box
-                            component="img"
-                            src={landingPageIllustration}
-                            alt="Yeshiva Class SpeedReg"
-                            width="100%"
-                        />
+                        <FeaturedReviewsSection variant="h4" component="h3" mb={2}>
+                            Featured Reviews
+                        </FeaturedReviewsSection>
+                        <ReviewCard>
+                            <CardContent>
+                                <Box display="flex" alignItems="center">
+                                    <ReviewerName variant="h6">Josh Matthew</ReviewerName>
+                                    <ReviewRating value={5} readOnly />
+                                </Box>
+                                <ReviewText>
+                                    "I needed to get into David Puretz's First Year Writing for an easy A, and ImIn was able to get me into his class when there was only one spot remaining!"
+                                </ReviewText>
+                            </CardContent>
+                        </ReviewCard>
+                        <ReviewCard>
+                            <CardContent>
+                                <Box display="flex" alignItems="center">
+                                    <ReviewerName variant="h6">Taylor Dinar</ReviewerName>
+                                    <ReviewRating value={5} readOnly />
+                                </Box>
+                                <ReviewText>
+                                    "It was my last semester and I had to finish my Jewish Cores and I was able to get into all of them with ImIn."
+                                </ReviewText>
+                            </CardContent>
+                        </ReviewCard>
+                        <ReviewCard>
+                            <CardContent>
+                                <Box display="flex" alignItems="center">
+                                    <ReviewerName variant="h6">Yehuda Siri</ReviewerName>
+                                    <ReviewRating value={5} readOnly />
+                                </Box>
+                                <ReviewText>
+                                    "I had to get into R' Feldman's Jewish Public Policy class, and ImIn made it happen."
+                                </ReviewText>
+                            </CardContent>
+                        </ReviewCard>
                     </Grid>
                 </Grid>
             </MainSection>
