@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {AppBar, Toolbar, Typography, Button, Container, Grid, Box, Card, CardContent} from '@mui/material';
 import { styled } from '@mui/system';
 import dateNTime from '../assests/date-and-time.gif'
@@ -7,14 +7,15 @@ import screenshot from '../assests/screenshot.gif'
 import {useNavigate} from "react-router-dom";
 import { Rating } from '@mui/lab';
 import { useMediaQuery } from '@mui/material';
+import ScrollTrigger from 'react-scroll-trigger'
+import IconButton from '@mui/material/IconButton';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+
 
 
 
 const Root = styled('div')(({ theme }) => ({
     minHeight: '100vh',
-    backgroundImage: 'linear-gradient(to bottom right, #29539B, #ffffff, #29539B)',
-    backgroundRepeat: 'no-repeat',
-    backgroundSize: 'cover',
 }));
 
 const Header = styled(AppBar)(({ theme }) => ({
@@ -28,9 +29,15 @@ const ToolbarContainer = styled(Container)(({ theme }) => ({
     justifyContent: 'space-between',
 }));
 
-const MainSection = styled(Container)(({ theme }) => ({
+
+const MainSection = styled(Box)(({ theme }) => ({
+    height: '100vh',
     paddingTop: theme.spacing(10),
     paddingBottom: theme.spacing(10),
+    backgroundColor: '#330000',
+    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 800 400'%3E%3Cdefs%3E%3CradialGradient id='a' cx='396' cy='281' r='514' gradientUnits='userSpaceOnUse'%3E%3Cstop offset='0' stop-color='%23146CDD'/%3E%3Cstop offset='1' stop-color='%23330000'/%3E%3C/radialGradient%3E%3ClinearGradient id='b' gradientUnits='userSpaceOnUse' x1='400' y1='148' x2='400' y2='333'%3E%3Cstop offset='0' stop-color='%23FFFFFF' stop-opacity='0'/%3E%3Cstop offset='1' stop-color='%23FFFFFF' stop-opacity='0.5'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect fill='url(%23a)' width='800' height='400'/%3E%3Cg fill-opacity='0.4'%3E%3Ccircle fill='url(%23b)' cx='267.5' cy='61' r='300'/%3E%3Ccircle fill='url(%23b)' cx='532.5' cy='61' r='300'/%3E%3Ccircle fill='url(%23b)' cx='400' cy='30' r='300'/%3E%3C/g%3E%3C/svg%3E")`,
+    backgroundAttachment: 'fixed',
+    backgroundSize: 'cover',
 }));
 
 const Title = styled(Typography)(({ theme }) => ({
@@ -46,17 +53,12 @@ const Subtitle = styled(Typography)(({ theme }) => ({
     textShadow: '1px 1px 2px rgba(0, 0, 0, 0.5)',
 }));
 
-const CTAButton = styled(Button)(({ theme }) => ({
-    backgroundColor: theme.palette.primary.main,
-    color: theme.palette.primary.contrastText,
-    '&:hover': {
-        backgroundColor: theme.palette.primary.dark,
-    },
-}));
-
-const HowItWorksSection = styled(Container)(({ theme }) => ({
+const HowItWorksSection = styled(Box)(({ theme }) => ({
+    height: '100vh',
     paddingTop: theme.spacing(10),
     paddingBottom: theme.spacing(10),
+    backgroundColor: '#EEEEEE',
+
 }));
 
 const StepContainer = styled(Grid)(({ theme }) => ({
@@ -77,9 +79,13 @@ const StepDescription = styled(Typography)(({ theme }) => ({
     marginBottom: theme.spacing(2),
 }));
 
-const PricingSection = styled(Container)(({ theme }) => ({
+const PricingSection = styled(Box)(({ theme }) => ({
+    height: '100vh',
     paddingTop: theme.spacing(10),
     paddingBottom: theme.spacing(10),
+    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 800 400'%3E%3Cdefs%3E%3CradialGradient id='a' cx='396' cy='281' r='514' gradientUnits='userSpaceOnUse'%3E%3Cstop offset='0' stop-color='%23146CDD'/%3E%3Cstop offset='1' stop-color='%23330000'/%3E%3C/radialGradient%3E%3ClinearGradient id='b' gradientUnits='userSpaceOnUse' x1='400' y1='148' x2='400' y2='333'%3E%3Cstop offset='0' stop-color='%23FFFFFF' stop-opacity='0'/%3E%3Cstop offset='1' stop-color='%23FFFFFF' stop-opacity='0.5'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect fill='url(%23a)' width='800' height='400'/%3E%3Cg fill-opacity='0.4'%3E%3Ccircle fill='url(%23b)' cx='267.5' cy='61' r='300'/%3E%3Ccircle fill='url(%23b)' cx='532.5' cy='61' r='300'/%3E%3Ccircle fill='url(%23b)' cx='400' cy='30' r='300'/%3E%3C/g%3E%3C/svg%3E")`,
+    backgroundAttachment: 'fixed',
+    backgroundSize: 'cover',
 }));
 
 const PricingCard = styled(Card)(({ theme }) => ({
@@ -133,20 +139,31 @@ const FeaturedReviewsSection = styled(Typography)(({ theme }) => ({
 
 
 
+
+
 function LandingPage() {
     const matches = useMediaQuery(theme => theme.breakpoints.down('sm'));
     const titleColor = matches ? '#e0f0ff' : '#ffffff';
     const navigate = useNavigate();
+    const [isVisible, setIsVisible] = useState(false);
+
+    const onEnter = () => {
+        setIsVisible(true);
+    };
+
+    const onExit = () => {
+        setIsVisible(false);
+    };
 
     const handleLogin = () => {
         navigate('/login')
     }
+
     return (
         <Root>
             <Header position="static">
                 <ToolbarContainer maxWidth="lg">
                     <Toolbar disableGutters>
-
                         <Box flexGrow={1} />
                         <Box>
                             <Button color="primary" variant="outlined" onClick={handleLogin}>
@@ -156,117 +173,151 @@ function LandingPage() {
                     </Toolbar>
                 </ToolbarContainer>
             </Header>
-            <MainSection maxWidth="lg">
-                <Grid container spacing={4} justifyContent="center" alignItems="center">
-                    <Grid item xs={12} md={6}>
-                        <Title variant="h3" component="h1" style={{ color: titleColor }}>
-                            Register for Yeshiva University classes faster than ever
-                        </Title>
-                        <Subtitle variant="h6" component="p" style={{ color: titleColor }}>
-                            Be the student who got that last spot. Don't miss out on the courses you need register in approximately one second or less!
-                        </Subtitle>
-                        <CTAButton variant="contained" size="large" onClick={handleLogin}>
-                            Get started
-                        </CTAButton>
+            <MainSection>
+                <Container maxWidth="lg">
+                    <Grid container spacing={4} justifyContent="center" alignItems="center">
+                        <Grid item xs={12} md={6}>
+                            <Title variant="h3" component="h1" style={{ color: titleColor }}>
+                                Register for Yeshiva University classes faster than ever
+                            </Title>
+                            <Subtitle variant="h6" component="p" style={{ color: titleColor }}>
+                                Be the student who got that last spot. Don't miss out on the courses you need register in approximately one second or less!
+                            </Subtitle>
+                            <Button variant="contained" color="secondary" size="large" onClick={handleLogin}>
+                                Get Started
+                            </Button>
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                            <FeaturedReviewsSection variant="h4" component="h3" mb={2} style={{ color: titleColor }}>
+                                Featured Reviews
+                            </FeaturedReviewsSection>
+                            <ReviewCard>
+                                <CardContent>
+                                    <Box display="flex" alignItems="center">
+                                        <ReviewerName variant="h6">Josh Matthew</ReviewerName>
+                                        <ReviewRating value={5} readOnly />
+                                    </Box>
+                                    <ReviewText>
+                                        "I needed to get into David Puretz's First Year Writing for an easy A, and ImIn was able to get me into his class when there was only one spot remaining!"
+                                    </ReviewText>
+                                </CardContent>
+                            </ReviewCard>
+                            <ReviewCard>
+                                <CardContent>
+                                    <Box display="flex" alignItems="center">
+                                        <ReviewerName variant="h6">Taylor Dinar</ReviewerName>
+                                        <ReviewRating value={5} readOnly />
+                                    </Box>
+                                    <ReviewText>
+                                        "It was my last semester and I had to finish my Jewish Cores and I was able to get into all of them with ImIn."
+                                    </ReviewText>
+                                </CardContent>
+                            </ReviewCard>
+                            <ReviewCard>
+                                <CardContent>
+                                    <Box display="flex" alignItems="center">
+                                        <ReviewerName variant="h6">Yehuda Siri</ReviewerName>
+                                        <ReviewRating value={5} readOnly />
+                                    </Box>
+                                    <ReviewText>
+                                        "I had to get into R' Feldman's Jewish Public Policy class, and ImIn made it happen."
+                                    </ReviewText>
+                                </CardContent>
+                            </ReviewCard>
+                        </Grid>
+
                     </Grid>
-                    <Grid item xs={12} md={6}>
-                        <FeaturedReviewsSection variant="h4" component="h3" mb={2} style={{ color: titleColor }}>
-                            Featured Reviews
-                        </FeaturedReviewsSection>
-                        <ReviewCard>
-                            <CardContent>
-                                <Box display="flex" alignItems="center">
-                                    <ReviewerName variant="h6">Josh Matthew</ReviewerName>
-                                    <ReviewRating value={5} readOnly />
-                                </Box>
-                                <ReviewText>
-                                    "I needed to get into David Puretz's First Year Writing for an easy A, and ImIn was able to get me into his class when there was only one spot remaining!"
-                                </ReviewText>
-                            </CardContent>
-                        </ReviewCard>
-                        <ReviewCard>
-                            <CardContent>
-                                <Box display="flex" alignItems="center">
-                                    <ReviewerName variant="h6">Taylor Dinar</ReviewerName>
-                                    <ReviewRating value={5} readOnly />
-                                </Box>
-                                <ReviewText>
-                                    "It was my last semester and I had to finish my Jewish Cores and I was able to get into all of them with ImIn."
-                                </ReviewText>
-                            </CardContent>
-                        </ReviewCard>
-                        <ReviewCard>
-                            <CardContent>
-                                <Box display="flex" alignItems="center">
-                                    <ReviewerName variant="h6">Yehuda Siri</ReviewerName>
-                                    <ReviewRating value={5} readOnly />
-                                </Box>
-                                <ReviewText>
-                                    "I had to get into R' Feldman's Jewish Public Policy class, and ImIn made it happen."
-                                </ReviewText>
-                            </CardContent>
-                        </ReviewCard>
-                    </Grid>
-                </Grid>
+                    <Box
+                        display="flex"
+                        justifyContent="center"
+                        alignItems="flex-end"
+                        height="100%"
+                        paddingTop={10}
+                    >
+                        <IconButton
+                            color="secondary"
+                            onClick={() => {
+                                window.scrollTo({
+                                    top: document.documentElement.clientHeight,
+                                    behavior: 'smooth',
+                                });
+                            }}
+                        >
+                            <KeyboardArrowDownIcon fontSize="large" />
+                        </IconButton>
+                    </Box>
+                </Container>
             </MainSection>
-            <HowItWorksSection maxWidth="lg">
-                <Typography variant="h4" component="h2" textAlign="center" mb={6}>
-                    How it Works
-                </Typography>
-                <Grid container spacing={6} justifyContent="center">
-                    <StepContainer item xs={12} md={4}>
-                        <StepImage src={dateNTime} />
-                        <StepTitle variant="h6" component="h3">
-                            Step 1: Enter Registration Info
-                        </StepTitle>
-                        <StepDescription>
-                            Enter your 800 number, Banner Pin, and the date and time of your registration.
-                            If you do not know your pin please follow the reset pin instructions found <a href='https://banner.oci.yu.edu/ssb/twbkwbis.P_GenMenu?name=bmenu.P_MainMnu'>here</a> .
-                        </StepDescription>
-                    </StepContainer>
-                    <StepContainer item xs={12} md={4}>
-                        <StepImage src={crns} alt="Step 2" />
-                        <StepTitle variant="h6" component="h3">
-                            Step 2: Enter Crns
-                        </StepTitle>
-                        <StepDescription>
-                            Enter up to 6 CRNs and optionally enter backup CRNs in the event there is a problem with the CRN you entered above it.
-                        </StepDescription>
-                    </StepContainer>
-                    <StepContainer item xs={12} md={4}>
-                        <StepImage src={screenshot} alt="Step 3" />
-                        <StepTitle variant="h6" component="h3">
-                            Step 3: Wait for the Screenshot
-                        </StepTitle>
-                        <StepDescription>
-                            As soon as registration opens, ImIn will quickly register you for your chosen classes then display a screenshot of the registration page.
-                        </StepDescription>
-                    </StepContainer>
-                </Grid>
-            </HowItWorksSection>
-            <PricingSection maxWidth="lg">
-                <Typography variant="h4" component="h2" textAlign="center" mb={6}>
-                    Pricing
-                </Typography>
-                <Grid container justifyContent="center">
-                    <Grid item xs={12} sm={8} md={6}>
-                        <PricingCard>
-                            <CardContent>
-                                <PriceTitle variant="h6" component="h3">
-                                    ImIn Pro
-                                </PriceTitle>
-                                <PriceAmount>$19.99 / semester</PriceAmount>
-                                <PriceDescription>
-                                    Get instant access to class registration and secure your desired classes with ease.
-                                </PriceDescription>
-                                <Button variant="contained" color="secondary" size="large" onClick={handleLogin}>
-                                    Get Started
-                                </Button>
-                            </CardContent>
-                        </PricingCard>
-                    </Grid>
-                </Grid>
-            </PricingSection>
+            <ScrollTrigger onEnter={onEnter} onExit={onExit}>
+                <HowItWorksSection style={{ opacity: isVisible ? 1 : 0, transition: 'opacity 1s' }}>
+                    <Container maxWidth="lg">
+                        <Typography variant="h4" component="h2" textAlign="center" mb={6}>
+                            How it Works
+                        </Typography>
+                        <Grid container spacing={6} justifyContent="center">
+                            <StepContainer item xs={12} md={4}>
+                                <StepImage src={dateNTime} />
+                                <StepTitle variant="h6" component="h3">
+                                    Step 1: Enter Registration Info
+                                </StepTitle>
+                                <StepDescription>
+                                    Enter your 800 number, Banner Pin, and the date and time of your registration.
+                                    If you do not know your pin please follow the reset pin instructions found <a href='https://banner.oci.yu.edu/ssb/twbkwbis.P_GenMenu?name=bmenu.P_MainMnu'>here</a>.
+                                </StepDescription>
+                            </StepContainer>
+
+                            <StepContainer item xs={12} md={4}>
+                                <StepImage src={crns} alt="Step 2" />
+                                <StepTitle variant="h6" component="h3">
+                                    Step 2: Enter Crns
+                                </StepTitle>
+                                <StepDescription>
+                                    Enter up to 6 CRNs and optionally enter backup CRNs in the event there is a problem with the CRN you entered above it.
+                                </StepDescription>
+                            </StepContainer>
+                            <StepContainer item xs={12} md={4}>
+                                <StepImage src={screenshot} alt="Step 3" />
+                                <StepTitle variant="h6" component="h3">
+                                    Step 3: Wait for the Screenshot
+                                </StepTitle>
+                                <StepDescription>
+                                    As soon as registration opens, ImIn will quickly register you for your chosen classes then display a screenshot of the registration page.
+                                </StepDescription>
+                            </StepContainer>
+                        </Grid>
+                    </Container>
+                </HowItWorksSection>
+
+            </ScrollTrigger>
+
+            <ScrollTrigger onEnter={onEnter} onExit={onExit}>
+                <PricingSection style={{ opacity: isVisible ? 1 : 0, transition: 'opacity 1s' }}>
+                    <Container maxWidth="lg">
+                        <Typography variant="h4" component="h2" textAlign="center" mb={6} color='#ffffff'>
+                            Pricing
+                        </Typography>
+                        <Grid container justifyContent="center">
+                            <Grid item xs={12} sm={8} md={6}>
+                                <PricingCard>
+                                    <CardContent>
+                                        <PriceTitle variant="h6" component="h3">
+                                            ImIn Pro
+                                        </PriceTitle>
+                                        <PriceAmount>$19.99 / semester</PriceAmount>
+                                        <PriceDescription>
+                                            Get instant access to class registration and secure your desired classes with ease.
+                                        </PriceDescription>
+                                        <Button variant="contained" color="secondary" size="large" onClick={handleLogin}>
+                                            Get Started
+                                        </Button>
+                                    </CardContent>
+                                </PricingCard>
+                            </Grid>
+                        </Grid>
+                    </Container>
+                </PricingSection>
+            </ScrollTrigger>
+
         </Root>
     );
 }

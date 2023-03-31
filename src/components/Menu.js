@@ -1,4 +1,4 @@
-import {AppBar, Menu, MenuItem, Toolbar} from "@mui/material";
+import {AppBar, Menu, MenuItem, Modal, Toolbar} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
 import IconButton from "@mui/material/IconButton";
@@ -6,6 +6,18 @@ import {AccountCircle} from "@mui/icons-material";
 import Button from "@mui/material/Button";
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
+import {Box} from "@mui/system";
+
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    boxShadow: 24,
+    p: 4,
+};
 
 
 export default function CustomMenu({logout}){
@@ -26,6 +38,14 @@ export default function CustomMenu({logout}){
         navigate("/feedback")
     }
 
+    const findCrns = () => {
+
+    }
+
+    const [timeOpen, setTimeOpen] = React.useState(false);
+    const handleOpenTimes = () => setTimeOpen(true);
+    const handleCloseTimes = () => setTimeOpen(false);
+
     return(
         <div>
             <AppBar position="static">
@@ -33,6 +53,44 @@ export default function CustomMenu({logout}){
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         ImIn
                     </Typography>
+                    <Button color="inherit" onClick={handleOpenTimes}>See registration times</Button>
+                    <Modal
+                        open={timeOpen}
+                        onClose={handleCloseTimes}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                    >
+                        <Box sx={style}>
+                            <Typography id="modal-modal-title" variant="h6" component="h2">
+                                Registration Times
+                            </Typography>
+                            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                                Upper Seniors: 8:00 AM
+                            </Typography>
+                            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                                Lower Seniors: 8:30 AM
+                            </Typography>
+                            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                                Upper Juniors: 9:00 AM
+                            </Typography>
+                            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                                Lower Juniors: 9:30 AM
+                            </Typography>
+                            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                                Upper Sophomores: 9:30 AM
+                            </Typography>
+                            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                                Lower Sophomores: 9:30 AM
+                            </Typography>
+                            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                                Upper Freshmen: 9:30 AM
+                            </Typography>
+                            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                                Lower Freshmen: 9:30 AM
+                            </Typography>
+                        </Box>
+                    </Modal>
+                    {/*<Button color="inherit" onClick={findCrns}>Find CRNs</Button>*/}
                     <React.Fragment>
                         <IconButton
                             onClick={handleClick}
