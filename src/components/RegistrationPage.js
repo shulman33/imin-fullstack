@@ -50,15 +50,6 @@ function RegistrationPage({logout}) {
         crn6: null
     })
 
-    const [backups, setBackups] = useState({
-        crn1: null,
-        crn2: null,
-        crn3: null,
-        crn4: null,
-        crn5: null,
-        crn6: null
-    })
-
     const [alert, setAlert] = useState(false);
 
     const [showPassword, setShowPassword] = useState(false);
@@ -190,12 +181,6 @@ function RegistrationPage({logout}) {
                     crn4: crnValues.crn4,
                     crn5: crnValues.crn5,
                     crn6: crnValues.crn6,
-                    bcrn1: backups.crn1,
-                    bcrn2: backups.crn2,
-                    bcrn3: backups.crn3,
-                    bcrn4: backups.crn4,
-                    bcrn5: backups.crn5,
-                    bcrn6: backups.crn6,
                     cron: getCron()
                 }
             });
@@ -281,15 +266,6 @@ function RegistrationPage({logout}) {
             [name]: value,
         });
     };
-
-    const handleBackupsChange = (event) => {
-        const { name, value } = event.target;
-        setBackups({
-            ...backups,
-            [name]: value,
-        });
-    }
-
 
     const handleDateChange = (newValue) => {
         onChange({ target: { name: "date", value: newValue } });
@@ -659,65 +635,6 @@ function RegistrationPage({logout}) {
                                                     name="crn6"
                                                     value={crnValues.crn6 || ""}
                                                     onChange={handleCrnChange}
-                                                    style={{width: '10vh', marginLeft: '5px', textAlign: 'center'}}
-                                                />
-                                            </Grid>
-
-                                        </Grid>
-                                        <Divider>BACKUP CRNS</Divider>
-                                        <Grid container spacing={1} justifyContent="center">
-                                            <Grid item xs={12} sm={4} md={2}>
-                                                <TextField
-                                                    label="CRN1"
-                                                    name="crn1"
-                                                    value={backups.crn1 || ""}
-                                                    onChange={handleBackupsChange}
-                                                    style={{width: '10vh', marginLeft: '5px', textAlign: 'center'}}
-                                                />
-                                            </Grid>
-
-                                            <Grid item xs={12} sm={4} md={2}>
-                                                <TextField
-                                                    label="CRN2"
-                                                    name="crn2"
-                                                    value={backups.crn2 || ""}
-                                                    onChange={handleBackupsChange}
-                                                    style={{width: '10vh', marginLeft: '5px', textAlign: 'center'}}
-                                                />
-                                            </Grid>
-                                            <Grid item xs={12} sm={4} md={2}>
-                                                <TextField
-                                                    label="CRN3"
-                                                    name="crn3"
-                                                    value={backups.crn3 || ""}
-                                                    onChange={handleBackupsChange}
-                                                    style={{width: '10vh', marginLeft: '5px', textAlign: 'center'}}
-                                                />
-                                            </Grid>
-                                            <Grid item xs={12} sm={4} md={2}>
-                                                <TextField
-                                                    label="CRN4"
-                                                    name="crn4"
-                                                    value={backups.crn4 || ""}
-                                                    onChange={handleBackupsChange}
-                                                    style={{width: '10vh', marginLeft: '5px', textAlign: 'center'}}
-                                                />
-                                            </Grid>
-                                            <Grid item xs={12} sm={4} md={2}>
-                                                <TextField
-                                                    label="CRN5"
-                                                    name="crn5"
-                                                    value={backups.crn5 || ""}
-                                                    onChange={handleBackupsChange}
-                                                    style={{width: '10vh', marginLeft: '5px', textAlign: 'center'}}
-                                                />
-                                            </Grid>
-                                            <Grid item xs={12} sm={4} md={2}>
-                                                <TextField
-                                                    label="CRN6"
-                                                    name="crn6"
-                                                    value={backups.crn6 || ""}
-                                                    onChange={handleBackupsChange}
                                                     style={{width: '10vh', marginLeft: '5px', textAlign: 'center'}}
                                                 />
                                             </Grid>
