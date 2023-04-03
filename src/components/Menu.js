@@ -1,13 +1,18 @@
-import {AppBar, Menu, MenuItem, Modal, Toolbar} from "@mui/material";
+import {AppBar, InputAdornment, Menu, MenuItem, Modal, Toolbar} from "@mui/material";
 import Typography from "@mui/material/Typography";
+import TextField from '@mui/material/TextField';
 import * as React from "react";
 import IconButton from "@mui/material/IconButton";
-import {AccountCircle} from "@mui/icons-material";
+import {AccountCircle, Search} from "@mui/icons-material";
 import Button from "@mui/material/Button";
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 import {Box} from "@mui/system";
 import logo from "../assests/white-words-transparent.png"
+import Paper from "@mui/material/Paper";
+import Grid from '@mui/material/Grid';
+import CircularProgress from '@mui/material/CircularProgress';
+
 
 const style = {
     position: 'absolute',
@@ -22,6 +27,35 @@ const style = {
 
 
 export default function CustomMenu({logout}){
+    const [searchString, setSearchString] = useState('');
+    const [searchResults, setSearchResults] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+
+    const handleChange = (event) => {
+        setSearchString(event.target.value);
+    };
+
+    useEffect(() => {
+        const fetchResults = async () => {
+            if (searchString.length > 2) {
+                setLoading(true);
+                const response = await fetch(
+                    `https://wbg1ufpg43.execute-api.us-east-1.amazonaws.com/Prod/search/?search_string=${searchString}`
+                );
+                const data = await response.json();
+                setSearchResults(data.result);
+                setLoading(false);
+            } else {
+                setSearchResults([]);
+            }
+        };
+
+
+        const timeout = setTimeout(fetchResults, 500);
+        return () => clearTimeout(timeout);
+    }, [searchString]);
+
     const navigate = useNavigate();
 
     const [anchorEl, setAnchorEl] = useState(null);
@@ -48,12 +82,41 @@ export default function CustomMenu({logout}){
     const handleCloseTimes = () => setTimeOpen(false);
 
     return(
-        <div>
+        <div style={{ backgroundColor: "transparent" }}>
             <AppBar position="static">
                 <Toolbar>
                     <Box display="flex" flexGrow={1}>
                         <img src={logo} alt="Logo" style={{ height: '80px', marginRight: '16px' }} />
                     </Box>
+                    <Grid container justifyContent="center">
+                        <Grid item xs={12} sm={8} md={6} lg={4}>
+                            <TextField
+                                placeholder="Search for a class"
+                                value={searchString}
+                                onChange={handleChange}
+                                fullWidth
+                                variant="outlined"
+                                sx={{
+                                    mt: 2,
+                                    mb: 2,
+                                    ml: 6,
+                                    backgroundColor: 'rgb(82, 120, 205)',
+                                    borderRadius: '4px',
+                                }}
+                                InputProps={{
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                            <IconButton edge="end" disabled={loading}>
+                                                {loading ? <CircularProgress size={20} /> : <Search />}
+                                            </IconButton>
+                                        </InputAdornment>
+                                    ),
+                                }}
+                            />
+                        </Grid>
+                    </Grid>
+
+
                     <Button color="inherit" onClick={handleOpenTimes}>See registration times</Button>
                     <Modal
                         open={timeOpen}
@@ -91,7 +154,6 @@ export default function CustomMenu({logout}){
                             </Typography>
                         </Box>
                     </Modal>
-                    {/*<Button color="inherit" onClick={findCrns}>Find CRNs</Button>*/}
                     <React.Fragment>
                         <IconButton
                             onClick={handleClick}
@@ -151,6 +213,23 @@ export default function CustomMenu({logout}){
                     </React.Fragment>
                 </Toolbar>
             </AppBar>
+            <Box mt={0} style={{ backgroundColor: 'transparent' }}>
+                <Grid container justifyContent="center">
+                    <Grid item xs={9} sm={5} md={3}>
+                        {searchResults.map((result, index) => (
+                            <Paper key={index} elevation={2} style={{ padding: 12, marginTop: 16 }}>
+                                <Typography variant="h6">{result.course_name} {result.subject}</Typography>
+                                <Typography variant="subtitle2">CRN {result.crn}</Typography>
+                                <Typography variant="subtitle1">spots remaining {result.rem}</Typography>
+                                <Typography variant="subtitle1">{result.day} {result.time}</Typography>
+                                <Typography variant="subtitle1">{result.professor}</Typography>
+                            </Paper>
+                        ))}
+                    </Grid>
+                </Grid>
+            </Box>
+
+
         </div>
     )
 

@@ -275,7 +275,8 @@ function LandingPage() {
                                         Step 2: Enter Crns
                                     </StepTitle>
                                     <StepDescription>
-                                        Enter up to 6 CRNs and optionally enter backup CRNs in the event there is a problem with the CRN you entered above it.
+                                        If you know the CRNs you want to register for, enter up to 6 CRNs, or search for CRNs using the search bar.
+                                        Optionally enter backup CRNs in the event there is a problem with the CRN you entered above it.
                                     </StepDescription>
                                 </StepContainer>
                                 <StepContainer item xs={12} md={4}>
