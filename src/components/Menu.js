@@ -7,6 +7,7 @@ import Button from "@mui/material/Button";
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {Box} from "@mui/system";
+import logo from "../assests/white-words-transparent.png"
 
 const style = {
     position: 'absolute',
@@ -50,9 +51,9 @@ export default function CustomMenu({logout}){
         <div>
             <AppBar position="static">
                 <Toolbar>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        ImIn
-                    </Typography>
+                    <Box display="flex" flexGrow={1}>
+                        <img src={logo} alt="Logo" style={{ height: '80px', marginRight: '16px' }} />
+                    </Box>
                     <Button color="inherit" onClick={handleOpenTimes}>See registration times</Button>
                     <Modal
                         open={timeOpen}

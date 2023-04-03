@@ -1,7 +1,7 @@
 //בס׳ד
 import * as React from "react";
 import {useEffect, useState} from "react";
-import logo from "../assests/ImIn-logos/ImIn-logos_black.png"
+import logo from "../assests/the-logo-transparent.png"
 import '../styles/regipage.css';
 import {Auth} from "aws-amplify";
 import Box from '@mui/material/Box';
@@ -382,33 +382,27 @@ function RegistrationPage({logout}) {
             <div className="form-container" style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
                 {arrived ? (
                     <Box
-                        sx={{
-                            borderRadius: '25px',
-                            width: 950,
-                            height: 900,
-                            backgroundColor: '#F8F8FF',
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            position: 'relative'
-                        }}
+                        style={
+                            {
+                                height: '100%',
+                                width: '100%',
+                                backgroundColor: '#330000',
+                                backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 800 400'%3E%3Cdefs%3E%3CradialGradient id='a' cx='396' cy='281' r='514' gradientUnits='userSpaceOnUse'%3E%3Cstop offset='0' stop-color='%23146CDD'/%3E%3Cstop offset='1' stop-color='%23330000'/%3E%3C/radialGradient%3E%3ClinearGradient id='b' gradientUnits='userSpaceOnUse' x1='400' y1='148' x2='400' y2='333'%3E%3Cstop offset='0' stop-color='%23FFFFFF' stop-opacity='0'/%3E%3Cstop offset='1' stop-color='%23FFFFFF' stop-opacity='0.5'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect fill='url(%23a)' width='800' height='400'/%3E%3Cg fill-opacity='0.4'%3E%3Ccircle fill='url(%23b)' cx='267.5' cy='61' r='300'/%3E%3Ccircle fill='url(%23b)' cx='532.5' cy='61' r='300'/%3E%3Ccircle fill='url(%23b)' cx='400' cy='30' r='300'/%3E%3C/g%3E%3C/svg%3E")`,
+                                backgroundAttachment: 'fixed',
+                                backgroundSize: 'cover',
+
+                            }
+
+                        }
+
                     >
-                        <Box
-                            sx={{
-                                position: 'absolute',
-                                top: 5,
-                                right: 30
-                            }}
-
+                        <Grid
+                            container
+                            direction="column"
+                            justifyContent="center"
+                            alignItems="center"
+                            style={{ height: '100%', width: '100%' }}
                         >
-                            <BackButton back={goBackToForm} />
-                        </Box>
-
-                        <img src={imageUrl} alt="Class screenshot" style={{width: '850px', height: '800px', borderRadius: '25px'}} />
-                    </Box>
-                ) : (
-                    <>
-                        {loading ? (
                             <Box
                                 sx={{
                                     borderRadius: '25px',
@@ -419,23 +413,96 @@ function RegistrationPage({logout}) {
                                     justifyContent: 'center',
                                     alignItems: 'center',
                                     position: 'relative'
-
                                 }}
                             >
                                 <Box
                                     sx={{
                                         position: 'absolute',
-                                        top: 30,
-                                        right: 50
+                                        top: 5,
+                                        right: 30
                                     }}
 
                                 >
                                     <BackButton back={goBackToForm} />
                                 </Box>
-                                <CircularProgress />
+
+                                <img src={imageUrl} alt="Class screenshot" style={{width: '850px', height: '800px', borderRadius: '25px'}} />
                             </Box>
+                        </Grid>
+                    </Box>
+
+                ) : (
+                    <>
+                        {loading ? (
+                            <Box
+                                style={
+                                    {
+                                        height: '100%',
+                                        width: '100%',
+                                        backgroundColor: '#330000',
+                                        backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 800 400'%3E%3Cdefs%3E%3CradialGradient id='a' cx='396' cy='281' r='514' gradientUnits='userSpaceOnUse'%3E%3Cstop offset='0' stop-color='%23146CDD'/%3E%3Cstop offset='1' stop-color='%23330000'/%3E%3C/radialGradient%3E%3ClinearGradient id='b' gradientUnits='userSpaceOnUse' x1='400' y1='148' x2='400' y2='333'%3E%3Cstop offset='0' stop-color='%23FFFFFF' stop-opacity='0'/%3E%3Cstop offset='1' stop-color='%23FFFFFF' stop-opacity='0.5'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect fill='url(%23a)' width='800' height='400'/%3E%3Cg fill-opacity='0.4'%3E%3Ccircle fill='url(%23b)' cx='267.5' cy='61' r='300'/%3E%3Ccircle fill='url(%23b)' cx='532.5' cy='61' r='300'/%3E%3Ccircle fill='url(%23b)' cx='400' cy='30' r='300'/%3E%3C/g%3E%3C/svg%3E")`,
+                                        backgroundAttachment: 'fixed',
+                                        backgroundSize: 'cover',
+
+                                    }
+
+                                }
+
+                            >
+                                <Grid
+                                    container
+                                    direction="column"
+                                    justifyContent="center"
+                                    alignItems="center"
+                                    style={{ height: '100%', width: '100%' }}
+                                >
+
+                                    <Box
+                                        sx={{
+                                            borderRadius: '25px',
+                                            width: 950,
+                                            height: 900,
+                                            backgroundColor: '#F8F8FF',
+                                            opacity: 0.85,
+                                            display: 'flex',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            position: 'relative'
+
+                                        }}
+                                    >
+                                        <Box
+                                            sx={{
+                                                position: 'absolute',
+                                                top: 30,
+                                                right: 50
+                                            }}
+
+                                        >
+                                            <BackButton back={goBackToForm} />
+                                        </Box>
+                                        <CircularProgress />
+                                    </Box>
+
+                                </Grid>
+                            </Box>
+
                         ) : (
-                            <div style={{ height: '100%', width: '100%' }}>
+                            <Box
+                                style={
+                                {
+                                    height: '100%',
+                                    width: '100%',
+                                    backgroundColor: '#330000',
+                                    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 800 400'%3E%3Cdefs%3E%3CradialGradient id='a' cx='396' cy='281' r='514' gradientUnits='userSpaceOnUse'%3E%3Cstop offset='0' stop-color='%23146CDD'/%3E%3Cstop offset='1' stop-color='%23330000'/%3E%3C/radialGradient%3E%3ClinearGradient id='b' gradientUnits='userSpaceOnUse' x1='400' y1='148' x2='400' y2='333'%3E%3Cstop offset='0' stop-color='%23FFFFFF' stop-opacity='0'/%3E%3Cstop offset='1' stop-color='%23FFFFFF' stop-opacity='0.5'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect fill='url(%23a)' width='800' height='400'/%3E%3Cg fill-opacity='0.4'%3E%3Ccircle fill='url(%23b)' cx='267.5' cy='61' r='300'/%3E%3Ccircle fill='url(%23b)' cx='532.5' cy='61' r='300'/%3E%3Ccircle fill='url(%23b)' cx='400' cy='30' r='300'/%3E%3C/g%3E%3C/svg%3E")`,
+                                    backgroundAttachment: 'fixed',
+                                    backgroundSize: 'cover',
+
+                                }
+
+                            }
+
+                            >
                                 <Grid
                                     container
                                     direction="column"
@@ -446,18 +513,21 @@ function RegistrationPage({logout}) {
                                     <Box
                                         component="form"
                                         onSubmit={handleSubmit}
-                                        sx={{
-                                            '@media (max-width: 430px)': {
-                                                width: '90%',
-                                            },
-                                            '& .MuiTextField-root': { m: 1 },
-                                        }}
                                         noValidate
+                                        sx={{
+                                            opacity: 0.85,
+                                        }}
+
                                     >
 
                                         <img className="logo" src={logo} alt="Im In logo" />
 
-                                        <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+                                        <Box
+                                            display="flex"
+                                            flexDirection="column"
+                                            justifyContent="center"
+                                            alignItems="center"
+                                        >
                                             <TextField
                                                 label="800 Number"
                                                 name="username"
@@ -535,7 +605,7 @@ function RegistrationPage({logout}) {
                                                     )}
                                                 />
                                             </LocalizationProvider>
-                                        </div>
+                                        </Box>
                                         <Grid container spacing={1} justifyContent="center" style={{ marginTop: '2vh' }}>
                                             <Grid item xs={12} sm={4} md={2}>
                                                 <TextField
@@ -653,12 +723,20 @@ function RegistrationPage({logout}) {
                                             </Grid>
 
                                         </Grid>
-                                        <div style={{marginTop: '2vh'}}>
-                                            <Button type="submit" disabled={!isValidForm()} variant="contained" fullWidth style={{fontWeight: 'bold'}}>Submit</Button>
-                                        </div>
+                                        <Box style={{ marginTop: '2vh' }}>
+                                            <Button
+                                                type="submit"
+                                                disabled={!isValidForm()}
+                                                variant="contained"
+                                                fullWidth
+                                                style={{ fontWeight: 'bold' }}
+                                            >
+                                                Submit
+                                            </Button>
+                                        </Box>
                                     </Box>
                                 </Grid>
-                            </div>
+                            </Box>
                         )}
                     </>
                 )}

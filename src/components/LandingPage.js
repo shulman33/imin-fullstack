@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {AppBar, Toolbar, Typography, Button, Container, Grid, Box, Card, CardContent} from '@mui/material';
 import { styled } from '@mui/system';
 import dateNTime from '../assests/date-and-time.gif'
+import logo from '../assests/the-logo-transparent.png'
 import crns from '../assests/crns.gif'
 import screenshot from '../assests/screenshot.gif'
 import {useNavigate} from "react-router-dom";
@@ -164,12 +165,12 @@ function LandingPage() {
             <Header position="static">
                 <ToolbarContainer maxWidth="lg">
                     <Toolbar disableGutters>
-                        <Box flexGrow={1} />
-                        <Box>
-                            <Button color="primary" variant="outlined" onClick={handleLogin}>
-                                Log in
-                            </Button>
+                        <Box display="flex" flexGrow={1} alignItems="center">
+                            <img src={logo} alt="Logo" style={{ height: '70px', marginRight: '16px' }} />
                         </Box>
+                        <Button color="primary" variant="outlined" onClick={handleLogin}>
+                            Log in
+                        </Button>
                     </Toolbar>
                 </ToolbarContainer>
             </Header>
@@ -187,45 +188,46 @@ function LandingPage() {
                                 Get Started
                             </Button>
                         </Grid>
-                        <Grid item xs={12} md={6}>
-                            <FeaturedReviewsSection variant="h4" component="h3" mb={2} style={{ color: titleColor }}>
-                                Featured Reviews
-                            </FeaturedReviewsSection>
-                            <ReviewCard>
-                                <CardContent>
-                                    <Box display="flex" alignItems="center">
-                                        <ReviewerName variant="h6">Josh Matthew</ReviewerName>
-                                        <ReviewRating value={5} readOnly />
-                                    </Box>
-                                    <ReviewText>
-                                        "I needed to get into David Puretz's First Year Writing for an easy A, and ImIn was able to get me into his class when there was only one spot remaining!"
-                                    </ReviewText>
-                                </CardContent>
-                            </ReviewCard>
-                            <ReviewCard>
-                                <CardContent>
-                                    <Box display="flex" alignItems="center">
-                                        <ReviewerName variant="h6">Taylor Dinar</ReviewerName>
-                                        <ReviewRating value={5} readOnly />
-                                    </Box>
-                                    <ReviewText>
-                                        "It was my last semester and I had to finish my Jewish Cores and I was able to get into all of them with ImIn."
-                                    </ReviewText>
-                                </CardContent>
-                            </ReviewCard>
-                            <ReviewCard>
-                                <CardContent>
-                                    <Box display="flex" alignItems="center">
-                                        <ReviewerName variant="h6">Yehuda Siri</ReviewerName>
-                                        <ReviewRating value={5} readOnly />
-                                    </Box>
-                                    <ReviewText>
-                                        "I had to get into R' Feldman's Jewish Public Policy class, and ImIn made it happen."
-                                    </ReviewText>
-                                </CardContent>
-                            </ReviewCard>
-                        </Grid>
-
+                        {!matches && (
+                            <Grid item xs={12} md={6}>
+                                <FeaturedReviewsSection variant="h4" component="h3" mb={2} style={{ color: titleColor }}>
+                                    Featured Reviews
+                                </FeaturedReviewsSection>
+                                <ReviewCard>
+                                    <CardContent>
+                                        <Box display="flex" alignItems="center">
+                                            <ReviewerName variant="h6">Josh Matthew</ReviewerName>
+                                            <ReviewRating value={5} readOnly />
+                                        </Box>
+                                        <ReviewText>
+                                            "I needed to get into David Puretz's First Year Writing for an easy A, and ImIn was able to get me into his class when there was only one spot remaining!"
+                                        </ReviewText>
+                                    </CardContent>
+                                </ReviewCard>
+                                <ReviewCard>
+                                    <CardContent>
+                                        <Box display="flex" alignItems="center">
+                                            <ReviewerName variant="h6">Taylor Dinar</ReviewerName>
+                                            <ReviewRating value={5} readOnly />
+                                        </Box>
+                                        <ReviewText>
+                                            "It was my last semester and I had to finish my Jewish Cores and I was able to get into all of them with ImIn."
+                                        </ReviewText>
+                                    </CardContent>
+                                </ReviewCard>
+                                <ReviewCard>
+                                    <CardContent>
+                                        <Box display="flex" alignItems="center">
+                                            <ReviewerName variant="h6">Yehuda Siri</ReviewerName>
+                                            <ReviewRating value={5} readOnly />
+                                        </Box>
+                                        <ReviewText>
+                                            "I had to get into R' Feldman's Jewish Public Policy class, and ImIn made it happen."
+                                        </ReviewText>
+                                    </CardContent>
+                                </ReviewCard>
+                            </Grid>
+                        )}
                     </Grid>
                     <Box
                         display="flex"
@@ -248,8 +250,50 @@ function LandingPage() {
                     </Box>
                 </Container>
             </MainSection>
-            <ScrollTrigger onEnter={onEnter} onExit={onExit}>
-                <HowItWorksSection style={{ opacity: isVisible ? 1 : 0, transition: 'opacity 1s' }}>
+            {!matches ? (
+                <ScrollTrigger onEnter={onEnter} onExit={onExit}>
+                    <HowItWorksSection style={{ opacity: isVisible ? 1 : 0, transition: 'opacity 1s' }}>
+                        <Container maxWidth="lg">
+                            <Typography variant="h4" component="h2" textAlign="center" mb={6}>
+                                How it Works
+                            </Typography>
+                            <Grid container spacing={6} justifyContent="center">
+                                <StepContainer item xs={12} md={4}>
+                                    <StepImage src={dateNTime} />
+                                    <StepTitle variant="h6" component="h3">
+                                        Step 1: Enter Registration Info
+                                    </StepTitle>
+                                    <StepDescription>
+                                        Enter your 800 number, Banner Pin, and the date and time of your registration.
+                                        If you do not know your pin please follow the reset pin instructions found <a href='https://banner.oci.yu.edu/ssb/twbkwbis.P_GenMenu?name=bmenu.P_MainMnu'>here</a>.
+                                    </StepDescription>
+                                </StepContainer>
+
+                                <StepContainer item xs={12} md={4}>
+                                    <StepImage src={crns} alt="Step 2" />
+                                    <StepTitle variant="h6" component="h3">
+                                        Step 2: Enter Crns
+                                    </StepTitle>
+                                    <StepDescription>
+                                        Enter up to 6 CRNs and optionally enter backup CRNs in the event there is a problem with the CRN you entered above it.
+                                    </StepDescription>
+                                </StepContainer>
+                                <StepContainer item xs={12} md={4}>
+                                    <StepImage src={screenshot} alt="Step 3" />
+                                    <StepTitle variant="h6" component="h3">
+                                        Step 3: Wait for the Screenshot
+                                    </StepTitle>
+                                    <StepDescription>
+                                        As soon as registration opens, ImIn will quickly register you for your chosen classes then display a screenshot of the registration page.
+                                    </StepDescription>
+                                </StepContainer>
+                            </Grid>
+                        </Container>
+                    </HowItWorksSection>
+
+                </ScrollTrigger>
+            ):(
+                <HowItWorksSection>
                     <Container maxWidth="lg">
                         <Typography variant="h4" component="h2" textAlign="center" mb={6}>
                             How it Works
@@ -287,36 +331,40 @@ function LandingPage() {
                         </Grid>
                     </Container>
                 </HowItWorksSection>
+            )}
 
-            </ScrollTrigger>
 
-            <ScrollTrigger onEnter={onEnter} onExit={onExit}>
-                <PricingSection style={{ opacity: isVisible ? 1 : 0, transition: 'opacity 1s' }}>
-                    <Container maxWidth="lg">
-                        <Typography variant="h4" component="h2" textAlign="center" mb={6} color='#ffffff'>
-                            Pricing
-                        </Typography>
-                        <Grid container justifyContent="center">
-                            <Grid item xs={12} sm={8} md={6}>
-                                <PricingCard>
-                                    <CardContent>
-                                        <PriceTitle variant="h6" component="h3">
-                                            ImIn Pro
-                                        </PriceTitle>
-                                        <PriceAmount>$19.99 / semester</PriceAmount>
-                                        <PriceDescription>
-                                            Get instant access to class registration and secure your desired classes with ease.
-                                        </PriceDescription>
-                                        <Button variant="contained" color="secondary" size="large" onClick={handleLogin}>
-                                            Get Started
-                                        </Button>
-                                    </CardContent>
-                                </PricingCard>
+            {!matches && (
+                <ScrollTrigger onEnter={onEnter} onExit={onExit}>
+                    <PricingSection style={{ opacity: isVisible ? 1 : 0, transition: 'opacity 1s' }}>
+                        <Container maxWidth="lg">
+                            <Typography variant="h4" component="h2" textAlign="center" mb={6} color='#ffffff'>
+                                Pricing
+                            </Typography>
+                            <Grid container justifyContent="center">
+                                <Grid item xs={12} sm={8} md={6}>
+                                    <PricingCard>
+                                        <CardContent>
+                                            <PriceTitle variant="h6" component="h3">
+                                                ImIn Pro
+                                            </PriceTitle>
+                                            <PriceAmount>$19.99 / semester</PriceAmount>
+                                            <PriceDescription>
+                                                Get instant access to class registration and secure your desired classes with ease.
+                                            </PriceDescription>
+                                            <Button variant="contained" color="secondary" size="large" onClick={handleLogin}>
+                                                Get Started
+                                            </Button>
+                                        </CardContent>
+                                    </PricingCard>
+                                </Grid>
                             </Grid>
-                        </Grid>
-                    </Container>
-                </PricingSection>
-            </ScrollTrigger>
+                        </Container>
+                    </PricingSection>
+                </ScrollTrigger>
+            )}
+
+
 
         </Root>
     );

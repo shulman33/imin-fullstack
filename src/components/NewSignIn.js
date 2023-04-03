@@ -11,7 +11,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Subscribe from "./Subscribe";
 import {Auth} from "aws-amplify";
 import {useState} from "react";
-import logo from '../assests/ImIn-logos/ImIn-logos.jpeg'
+import logo from '../assests/the-logo-transparent.png'
 import {useNavigate} from "react-router-dom";
 import Alert from "@mui/material/Alert";
 import {InputAdornment} from "@mui/material";
@@ -88,7 +88,7 @@ export default function SignInSide({loginUser}) {
                             alignItems: 'center',
                         }}
                     >
-                        <img alt='ImIn Logo' src={logo} style={{width : '15vh', marginBottom : '2vh', borderRadius : '50%'}}/>
+                        <img alt='ImIn Logo' src={logo} style={{width : '23vh', marginBottom : '2vh', borderRadius : '50%'}}/>
                         <Typography component="h1" variant="h5">
                             Sign in
                         </Typography>

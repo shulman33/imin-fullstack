@@ -42,7 +42,7 @@ function App() {
         <div>
           <Routes>
             {/*{!user && <Route path="/" element={<SignInSide loginUser={() => setUser(true)} />} />}}*/}
-            {!user && <Route path="/" element={<LandingPage/>} />}}
+            {!user && <Route path="/" element={<LandingPage/>} />}
             {user && <Route path="bot" element={<RegistrationPage logout={() => setUser(false)}/>} />}
             <Route path="/login" element={<SignInSide loginUser={() => setUser(true)} />} />
             <Route path="resetpassword" element={<ForceReset loginUser={() => setUser(true)}/>} />
