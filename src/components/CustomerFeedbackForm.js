@@ -63,7 +63,7 @@ const CustomerFeedbackForm = () => {
             <Paper elevation={3}>
                 <FormContainer component="form" onSubmit={handleSubmit}>
                     <FormTitle variant="h4" component="h2">
-                        Customer Feedback
+                        Customer Feedback and Support
                     </FormTitle>
                     {messageSent && (
                         <SuccessMessage color="success.main">

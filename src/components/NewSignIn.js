@@ -23,11 +23,23 @@ function Copyright(props) {
     return (
         <Typography variant="body2" color="text.secondary" align="center" {...props}>
             {'Copyright © '}
-            <Link color="inherit" href="https://mui.com/">
+            <Link color="inherit" href="https://babylonbee.com/">
                 ImIn
             </Link>{' '}
             {new Date().getFullYear()}
             {'.'}
+        </Typography>
+    );
+}
+
+function Support(props){
+    return (
+        <Typography variant="body2" color="text.secondary" align="center" {...props}>
+            {'Contact '}
+            <Link color="inherit" href="https://www.imin.site/feedback">
+                Support
+            </Link>{' '}
+            {'for Help.'}
         </Typography>
     );
 }
@@ -138,7 +150,8 @@ export default function SignInSide({loginUser}) {
                                 Sign In
                             </Button>
                             <Subscribe />
-                            <Copyright sx={{ mt: 5 }} />
+                            <Support sx={{ mt: 3 }} />
+                            <Copyright sx={{ mt: 3 }} />
                         </Box>
                     </Box>
                 </Grid>
