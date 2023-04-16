@@ -13,6 +13,7 @@ import UserAgreement from "./components/UserAgreement";
 import CustomerFeedbackForm from "./components/CustomerFeedbackForm";
 import LandingPage from "./components/LandingPage";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import ForgotPassword from "./components/ForgotPassword";
 
 const theme = createTheme({
   palette: {
@@ -45,6 +46,7 @@ function App() {
             {!user && <Route path="/" element={<LandingPage/>} />}
             {user && <Route path="bot" element={<RegistrationPage logout={() => setUser(false)}/>} />}
             <Route path="/login" element={<SignInSide loginUser={() => setUser(true)} />} />
+            <Route path="forgotpassword" element={<ForgotPassword />} />
             <Route path="resetpassword" element={<ForceReset loginUser={() => setUser(true)}/>} />
             {user && <Route path="cancelsubscription" element={<CancelSubscription logout={() => setUser(false)}/>} />}
             <Route path="useragreement" element={<UserAgreement/>} />

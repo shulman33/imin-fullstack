@@ -12,12 +12,12 @@ import Subscribe from "./Subscribe";
 import {Auth} from "aws-amplify";
 import {useState} from "react";
 import logo from '../assests/the-logo-transparent.png'
-import {useNavigate} from "react-router-dom";
 import Alert from "@mui/material/Alert";
 import {InputAdornment} from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import {useNavigate} from "react-router-dom";
 
 function Copyright(props) {
     return (
@@ -67,6 +67,9 @@ export default function SignInSide({loginUser}) {
             console.error(e);
             setErrorMessage('Incorrect username or password');
         }
+    }
+    const gotoForgot = () => {
+        navigate("/forgotpassword")
     }
 
     const [username, setUsername] = useState('')
@@ -150,8 +153,22 @@ export default function SignInSide({loginUser}) {
                                 Sign In
                             </Button>
                             <Subscribe />
-                            <Support sx={{ mt: 3 }} />
-                            <Copyright sx={{ mt: 3 }} />
+                            <Box
+                                sx={{
+                                    mt: 3,
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                }}
+                            >
+                                <Typography variant="body2" color="text.secondary" align="center" sx={{ mr: 2, cursor: 'pointer'}}>
+                                    <Link color="inherit" onClick={gotoForgot}>
+                                        Forgot Password?
+                                    </Link>{' '}
+                                </Typography>
+                                <Support />
+                            </Box>
+                            <Copyright sx={{ mt: 2 }} />
                         </Box>
                     </Box>
                 </Grid>
