@@ -65,6 +65,9 @@ const CustomerFeedbackForm = () => {
                     <FormTitle variant="h4" component="h2">
                         Customer Feedback and Support
                     </FormTitle>
+                    <Typography variant="body1" component="p">
+                        Either use this <a href="https://wa.me/message/KEJGPILYMXQLF1">link</a> to send us a WhatsApp message or fill out the form below.
+                    </Typography>
                     {messageSent && (
                         <SuccessMessage color="success.main">
                             Your feedback has been sent! Thank you.
