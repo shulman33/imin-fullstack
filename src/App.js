@@ -46,7 +46,7 @@ function App() {
             {user && <Route path="bot" element={<RegistrationPage logout={() => setUser(false)}/>} />}
             <Route path="/login" element={<SignInSide loginUser={() => setUser(true)} />} />
             <Route path="resetpassword" element={<ForceReset loginUser={() => setUser(true)}/>} />
-            <Route path="cancelsubscription" element={<CancelSubscription logout={() => setUser(false)}/>} />
+            {user && <Route path="cancelsubscription" element={<CancelSubscription logout={() => setUser(false)}/>} />}
             <Route path="useragreement" element={<UserAgreement/>} />
             <Route path="feedback" element={<CustomerFeedbackForm/>} />
             <Route path="*" element={<Navigate to={user ? "/bot" : "/"} />} />

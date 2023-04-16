@@ -37,6 +37,7 @@ export default function CancelSubscription({logout}) {
                     email: email.userEmail,
                 },
             });
+            navigate("/");
             console.log(response);
             console.log("worked!!!");
             localStorage.clear();
