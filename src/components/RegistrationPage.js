@@ -511,7 +511,7 @@ function RegistrationPage({logout}) {
                                                 onChange={onChange}
                                                 error={Boolean(errors.username)}
                                                 helperText={errors.username}
-                                                style={{ marginBottom: '10px', width: '205px' }}
+                                                style={{ marginBottom: '10px', width: '240px' }}
                                             />
                                             <TextField
                                                 label="Pin"
@@ -533,7 +533,7 @@ function RegistrationPage({logout}) {
                                                     ),
                                                 }}
                                                 error={Boolean(errors.password)}
-                                                style={{ marginBottom: '10px', width: '205px' }}
+                                                style={{ marginBottom: '10px', width: '240px'}}
                                                 onFocus={() => {
                                                     setInstruction("Enter your Banner PIN. If you do not know it, reset it ");
                                                     setLinkVisible(true);
@@ -560,7 +560,7 @@ function RegistrationPage({logout}) {
                                                             {...params}
                                                             error={Boolean(errors.date)}
                                                             helperText={errors.date}
-                                                            style={{ marginBottom: "10px" }}
+                                                            style={{ marginBottom: "10px", width: '240px' }}
                                                         />
                                                     )}
                                                 />
@@ -576,7 +576,7 @@ function RegistrationPage({logout}) {
                                                             {...params}
                                                             error={Boolean(errors.time)}
                                                             helperText={errors.time}
-                                                            style={{ marginBottom: "10px" }}
+                                                            style={{ marginBottom: "10px", width: '240px' }}
                                                         />
                                                     )}
                                                 />
