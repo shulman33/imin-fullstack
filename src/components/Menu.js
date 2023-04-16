@@ -129,28 +129,28 @@ export default function CustomMenu({logout}){
                                 Registration Times
                             </Typography>
                             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                                Upper Seniors: 8:00 AM
+                                Upper Seniors: TBD
                             </Typography>
                             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                                Lower Seniors: 8:30 AM
+                                Lower Seniors: TBD
                             </Typography>
                             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                                Upper Juniors: 9:00 AM
+                                Upper Juniors: TBD
                             </Typography>
                             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                                Lower Juniors: 9:30 AM
+                                Lower Juniors: TBD
                             </Typography>
                             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                                Upper Sophomores: 9:30 AM
+                                Upper Sophomores: TBD
                             </Typography>
                             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                                Lower Sophomores: 9:30 AM
+                                Lower Sophomores: TBD
                             </Typography>
                             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                                Upper Freshmen: 9:30 AM
+                                Upper Freshmen: TBD
                             </Typography>
                             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                                Lower Freshmen: 9:30 AM
+                                Lower Freshmen: TBD
                             </Typography>
                         </Box>
                     </Modal>
