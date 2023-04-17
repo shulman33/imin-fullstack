@@ -218,7 +218,7 @@ function LandingPage() {
                                 <ReviewCard>
                                     <CardContent>
                                         <Box display="flex" alignItems="center">
-                                            <ReviewerName variant="h6">Yehuda Siri</ReviewerName>
+                                            <ReviewerName variant="h6">Sammy Mayer</ReviewerName>
                                             <ReviewRating value={5} readOnly />
                                         </Box>
                                         <ReviewText>
