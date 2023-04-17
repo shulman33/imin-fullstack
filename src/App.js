@@ -14,6 +14,7 @@ import CustomerFeedbackForm from "./components/CustomerFeedbackForm";
 import LandingPage from "./components/LandingPage";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import ForgotPassword from "./components/ForgotPassword";
+import { getCurrentUser } from "./cognito-utils";
 
 const theme = createTheme({
   palette: {
@@ -31,11 +32,14 @@ function App() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const loggedInUser = localStorage.getItem("user");
-    if (loggedInUser) {
-      const foundUser = JSON.parse(loggedInUser);
-      setUser(foundUser);
-    }
+    const checkUserSession = async () => {
+      try {
+        const loggedInUser = await getCurrentUser();
+        setUser(loggedInUser);
+      } catch (error) {
+        console.log("Error:", error);
+      }
+    };
   }, []);
 
   return (
@@ -44,7 +48,7 @@ function App() {
           <Routes>
             {/*{!user && <Route path="/" element={<SignInSide loginUser={() => setUser(true)} />} />}}*/}
             {!user && <Route path="/" element={<LandingPage/>} />}
-            {user && <Route path="bot" element={<RegistrationPage logout={() => setUser(false)}/>} />}
+            {user && <Route path="bot" element={<RegistrationPage logout={() => setUser(null)}/>} />}
             <Route path="/login" element={<SignInSide loginUser={() => setUser(true)} />} />
             <Route path="forgotpassword" element={<ForgotPassword />} />
             <Route path="resetpassword" element={<ForceReset loginUser={() => setUser(true)}/>} />
