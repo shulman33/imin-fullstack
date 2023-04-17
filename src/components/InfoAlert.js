@@ -35,6 +35,7 @@ export default function InfoAlert() {
     >
         <Alert onClose={handleCloseSnackbar} severity="info" sx={{ width: '100%', fontSize: '1.1em' }}>
             <AlertTitle sx={{ fontSize: '1.3em' }}><strong>Heads Up!</strong></AlertTitle>
+            <p><strong>Registration times for Fall 2023</strong> have not been posted yet. As soon as the times are posted ImIn will be updated.</p>
             <p><strong>DO NOT</strong> try to use ImIn if you are unsure of your Banner PIN. You can reset your pin
                 <a href="https://banner.oci.yu.edu/ssb/twbkwbis.P_GenMenu?name=bmenu.P_MainMnu" target="_blank"> here </a>
             </p>
