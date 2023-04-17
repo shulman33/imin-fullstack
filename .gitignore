@@ -36,6 +36,7 @@ dist/
 node_modules/
 aws-exports.js
 cognito-config.js
+cognito-utils.js
 awsconfiguration.json
 amplifyconfiguration.json
 amplifyconfiguration.dart
